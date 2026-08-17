@@ -1,0 +1,8 @@
+[project]
+name = "fabopsy-heartz"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "fabopsy-lib>=0.0.1",
+    "opencv-python>=4.13"
+]

@@ -1,0 +1,38 @@
+version: '1.0'
+module:
+  uid: 4b49524d-00cd-4a14-988c-a35ad51bf157
+  name: HeartRate Estimation
+  version: 0.0.1
+  description: 'Select target from multi detected faces.'
+  keywords:
+    - Face
+    - Selection
+packages:
+  - uid: 08e29e70-e21b-4ef2-8486-5aaec5f8295b
+    name: HeartRate Estimation
+    version: 0.0.1
+    usage_models: []
+    inputs: []
+    provides:
+      - face/heart_rate
+    requires:
+      - face/dense_landmarks
+    entry:
+      method: fabopsy_hertz.v0.package.load
+    parameters:
+      - name: min_seconds
+        text: Min Seconds
+        description: Min seconds to start heart rate estimation
+        type: number
+        value: 1
+      - name: min_frames
+        text: Min Frames
+        description: Min frames to start heart rate estimation
+        type: integer
+        value: 10
+      - name: max_frames
+        text: Max Frames
+        description: Max frames to keep in algorithm to estimate heart rate
+        type: integer
+        value: 300
+    models: []
