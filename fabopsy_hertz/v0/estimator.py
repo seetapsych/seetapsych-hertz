@@ -7,7 +7,8 @@ import numpy
 
 
 from .hr import compute_heart_beat
-from .landmark_mapper_280281 import LandmarkMapper
+from .landmark_mapper_280281 import LandmarkMapper as LandmarkMapper280
+from .landmark_mapper_98281 import LandmarkMapper as LandmarkMapper98
 from .roi import extract_roi
 from .signal import extract_signal
 
@@ -40,7 +41,7 @@ class Estimator(object):
     def inference(self, image: numpy.ndarray, landmarks: numpy.ndarray, timestamp: float) -> HeartRateResult:
         """
         :param image: Image in HWC format with BGR layout.
-        :param landmarks: Facial landmarks with shape [x, 2]. x could be 280/81
+        :param landmarks: Facial landmarks with shape [x, 2]. x could be 280/98/81
         :param timestamp: timestamp in seconds
         :return:
         """
@@ -50,8 +51,11 @@ class Estimator(object):
         num_points = point2ds.shape[0]
         if num_points == 81:
             pass
+        elif num_points == 98:
+            mapper = LandmarkMapper98()
+            point2ds = mapper.map_98_to_81(point2ds)
         elif num_points == 280:
-            mapper = LandmarkMapper()
+            mapper = LandmarkMapper280()
             point2ds = mapper.map_280_to_81(point2ds)
         else:
             raise RuntimeError('Number landmarks must be 81/280')
