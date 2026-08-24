@@ -122,14 +122,8 @@ class Instance(api.Instance):
             return
 
         self.__timestamp = timestamp
-        self.__buffer_frames = numpy.concatenate(
-            [self.__buffer_frames, frames],
-            axis=0,
-        )
-        self.__buffer_faces = numpy.concatenate(
-            [self.__buffer_faces, faces],
-            axis=0,
-        )
+        self.__buffer_frames = numpy.concatenate([self.__buffer_frames, frames], axis=0)
+        self.__buffer_faces = numpy.concatenate([self.__buffer_faces, faces], axis=0)
 
     def clear_buffer(self):
         self.__buffer_frames = None

@@ -120,10 +120,7 @@ class Estimator(object):
         sample[0, 0] = signal_time
         sample[0, 1:] = signal
 
-        self.__signal = numpy.concatenate(
-            [self.__signal, sample],
-            axis=0,
-        )
+        self.__signal = numpy.concatenate([self.__signal, sample], axis=0)
 
         if len(self.__signal) > self.__signal_max_frames:
             self.__signal = self.__signal[-self.__signal_max_frames:]
@@ -146,10 +143,7 @@ class Estimator(object):
 
         time_span = self.__signal[-1, 0] - self.__signal[0, 0]
 
-        time_wait = max(
-            0.0,
-            self.__signal_min_seconds - time_span,
-            )
+        time_wait = max(0.0, self.__signal_min_seconds - time_span)
 
         if size >= self.__signal_min_frames:
             window_wait = 0.0
