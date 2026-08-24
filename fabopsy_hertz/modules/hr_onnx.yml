@@ -1,0 +1,45 @@
+version: '1.0'
+module:
+  uid: 0faf2236-2f76-44c0-be75-ad95fc5f5322
+  name: HeartRate Estimation ONNX Version
+  version: 0.0.1
+  description: 'Estimate heart rate from camera/video continuous frames.'
+  keywords:
+    - Face
+    - Heart Rate
+  requirements:
+    - numpy>=2
+    - opencv-python>=4
+    - scipy>=1.15.3
+    - onnxruntime-gpu>=1.23.2
+packages:
+  - uid: 23871da8-0968-4034-ac48-35641ae67d63
+    name: HeartRate Estimation ONNX
+    version: 0.0.1
+    usage_models: []
+    inputs: []
+    provides:
+      - face/heart_rate
+    requires:
+      - face/detection
+    entry:
+      method: fabopsy_hertz.hr_onnx.package.load
+    parameters:
+      - name: fps
+        text: FPS
+        description: Camera/Video expecting FPS
+        type: number
+        value: 30
+      - name: interval
+        text: Interval
+        description: Interval seconds to estimate heart rate
+        type: number
+        value: 1
+    models:
+      - uid: c745a157-cb59-4fb7-bce6-97b38ad416ab
+        name: heartrate.onnx
+        version: 0.0.1
+        recommended: true
+        entry:
+          method: fabopsy_hertz.hr_onnx.model.load
+

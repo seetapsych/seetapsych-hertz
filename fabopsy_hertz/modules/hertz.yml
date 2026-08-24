@@ -3,10 +3,14 @@ module:
   uid: 4b49524d-00cd-4a14-988c-a35ad51bf157
   name: HeartRate Estimation
   version: 0.0.1
-  description: 'Select target from multi detected faces.'
+  description: 'Estimate heart rate from camera/video continuous frames.'
   keywords:
     - Face
     - Selection
+  requirements:
+    - numpy>=2
+    - opencv-python>=4
+    - scipy>=1.15.3
 packages:
   - uid: 08e29e70-e21b-4ef2-8486-5aaec5f8295b
     name: HeartRate Estimation
