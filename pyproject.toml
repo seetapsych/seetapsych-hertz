@@ -1,8 +1,56 @@
 [project]
-name = "fabopsy-heartz"
-version = "0.1.0"
+name = "seetapsych-hertz"
+description = "Heart rate estimation modules for SeetaPsych"
+readme = "README.md"
 requires-python = ">=3.10"
+dynamic = ["version"]
+license = { file = "LICENSE" }
 dependencies = [
-    "fabopsy-lib>=0.0.1",
-    "opencv-python>=4.13"
+    "seetapsych-lib",
 ]
+
+[project.optional-dependencies]
+all = [
+    "numpy>=2.2.6",
+    "opencv-python>=4.13",
+    "scipy>=1.15.3",
+    "onnx>=1.20.1",
+    "onnxruntime>=1.24; sys_platform == 'darwin' and python_version > '3.10'",
+    "onnxruntime<1.24; sys_platform == 'darwin' and python_version <= '3.10'",
+    "onnxruntime-gpu>=1.24; sys_platform != 'darwin' and python_version > '3.10'",
+    "onnxruntime-gpu<1.24; sys_platform != 'darwin' and python_version <= '3.10'",
+]
+dev = [
+    "seetapsych-hertz[all]",
+    "build>=1.4.4",
+    "twine>=6.2.0",
+]
+
+[dependency-groups]
+dev = [
+    "seetapsych-hertz[dev]",
+]
+
+[tool.uv]
+default-groups = ["dev"]
+
+[tool.hatch.version]
+source = "vcs"
+fallback-version = "0.0.0.dev0"
+tag-pattern = "^r(?P<version>[^-]+)$"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "seetapsych_hertz/_version.py"
+
+[build-system]
+requires = ["hatchling>=1.26", "hatch-vcs>=0.4.0"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["seetapsych_hertz"]
+
+[tool.hatch.build.targets.wheel.package-data]
+seetapsych_hertz = ["modules/**/*.yml"]
+
+[tool.uv.sources]
+# seetapsych-lib = { workspace = true }

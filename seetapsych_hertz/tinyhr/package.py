@@ -5,7 +5,7 @@ from typing import Any, Optional
 import numpy
 import onnxruntime
 
-from fabopsy_lib import api
+from seetapsych_lib import api
 
 from .heartrate_onnx import CameraHRTracker, FPS_DEFAULT
 

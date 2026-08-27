@@ -1,19 +1,20 @@
 version: '1.0'
 module:
   uid: 4b49524d-00cd-4a14-988c-a35ad51bf157
-  name: HeartRate Estimation
+  name: SeetaHeartRateDetector
   version: 0.0.1
   description: 'Estimate heart rate from camera/video continuous frames.'
   keywords:
     - Face
     - Selection
   requirements:
-    - numpy>=2
-    - opencv-python>=4
+    - seetapsych-hertz
+    - numpy>=2.2.6
+    - opencv-python>=4.13
     - scipy>=1.15.3
 packages:
   - uid: 08e29e70-e21b-4ef2-8486-5aaec5f8295b
-    name: HeartRate Estimation
+    name: SeetaHeartRateDetector
     version: 0.0.1
     usage_models: []
     inputs: []
@@ -22,7 +23,7 @@ packages:
     requires:
       - face/dense_landmarks
     entry:
-      method: fabopsy_hertz.v0.package.load
+      method: seetapsych_hertz.v0.package.load
     parameters:
       - name: min_seconds
         text: Min Seconds

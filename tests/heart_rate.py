@@ -5,19 +5,18 @@ import os
 import cv2
 import numpy
 
-from fabopsy_lib.runtime.factory import Factory
-from fabopsy_lib.runtime.pipeline import Pipeline
-from fabopsy_lib.runtime.parallel_runner import ParallelRunner as Runner
+from seetapsych_lib.runtime.factory import Factory
+from seetapsych_lib.runtime.pipeline import Pipeline
+from seetapsych_lib.runtime.parallel_runner import ParallelRunner as Runner
 
 
 def main():
     factory = Factory()
     factory.load_builtin_modules()
 
-    factory.load_dir_modules(os.path.join(os.path.dirname(__file__), '../fabopsy_hertz/modules'))
-    factory.load_dir_modules(os.path.join(os.path.dirname(__file__), '../../fabopsy-face/fabopsy_face/modules'))
-    factory.load_dir_modules(os.path.join(os.path.dirname(__file__), '../../fabopsy-affect/fabopsy_affect/modules'))
-    factory.load_dir_modules(os.path.join(os.path.dirname(__file__), '../../fabopsy-face-open/fabopsy_face_open/modules'))
+    factory.load_dir_modules(os.path.join(os.path.dirname(__file__), '../seetapsych_hertz/modules'))
+    factory.load_dir_modules(os.path.join(os.path.dirname(__file__), '../../seetapsych-face-hub/seetapsych_face_hub/modules'))
+    factory.load_dir_modules(os.path.join(os.path.dirname(__file__), '../../seetapsych-face-ex/seetapsych_face_ex/modules'))
 
     pipeline = Pipeline(factory, packages=[
         'c938b879-44db-45b0-9a5d-8377f0ace5e5', # insightface's face/detection

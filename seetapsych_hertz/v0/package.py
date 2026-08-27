@@ -4,7 +4,7 @@ from typing import Any
 
 import numpy
 
-from fabopsy_lib import api
+from seetapsych_lib import api
 
 from .estimator import Estimator
 

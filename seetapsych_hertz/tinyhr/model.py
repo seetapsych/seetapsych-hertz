@@ -2,7 +2,7 @@
 
 import os.path
 
-from fabopsy_lib import api
+from seetapsych_lib import api
 
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
