@@ -23,7 +23,7 @@ packages:
     requires:
       - face/dense_landmarks
     entry:
-      method: seetapsych_hertz.v0.package.load
+      method: seetapsych_hertz.seeta.package.load
     parameters:
       - name: min_seconds
         text: Min Seconds
