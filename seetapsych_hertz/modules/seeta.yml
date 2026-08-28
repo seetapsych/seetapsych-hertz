@@ -15,6 +15,7 @@ module:
 packages:
   - uid: 08e29e70-e21b-4ef2-8486-5aaec5f8295b
     name: SeetaHeartRateDetector
+    description: Signal-processing heart rate estimator using forehead ROI from dense landmarks
     version: 0.0.1
     usage_models: []
     inputs: []

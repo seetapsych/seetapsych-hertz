@@ -15,6 +15,7 @@ module:
 packages:
   - uid: 3d98f435-d484-4b91-acf4-f690c28b409f
     name: AdaChrom
+    description: Adaptive chrominance-based rPPG heart rate estimation, no model required
     version: 0.0.1
     usage_models: []
     inputs: []

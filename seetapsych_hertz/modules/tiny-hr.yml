@@ -20,6 +20,7 @@ module:
 packages:
   - uid: 23871da8-0968-4034-ac48-35641ae67d63
     name: TinyHR
+    description: Fast heart rate estimation from face video frames via lightweight ONNX neural network
     version: 0.0.1
     usage_models: []
     inputs: []
