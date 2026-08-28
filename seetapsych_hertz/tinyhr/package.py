@@ -106,7 +106,7 @@ class Instance(api.Instance):
         return {
             'fps': self.__estimator.fps,
             'wait_seconds': 0,
-            'hr': hr,
+            'hr_bpm': hr,
         }
 
     def push_frame(self, frame: numpy.ndarray, face: numpy.ndarray, timestamp: float):

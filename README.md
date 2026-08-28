@@ -14,10 +14,10 @@ Heart rate estimation requires processing video or real-time video streams to ex
 
 ### WebUI
 
-Run `seetapsych-webui` with the `--dirs` argument to use it.
+Run `seetapsych-webui` with the `--files` argument to use it.
 
 ```
-seetapsych-webui --files seetapsych_hertz/modules/hertz.yml
+seetapsych-webui --files seetapsych_hertz/modules/seeta.yml
 ```
 
 ### Programmatic Usage
@@ -51,6 +51,18 @@ Parameters:
 - `min_frames` (int, default `10`): Minimum number of frames before estimation starts.
 - `max_frames` (int, default `300`): Maximum frames kept in the sliding signal window.
 
+### AdaChrom (Adaptive Chrominance)
+
+Adaptive chrominance-based heart rate estimation using frame-wise sliding window analysis. Extracts photoplethysmographic signals from an adaptive forehead skin ROI, processes each frame with chrominance methods to produce real-time BPM output without FFT fusion.
+
+Module config: [ada-chrom.yml](seetapsych_hertz/modules/ada-chrom.yml).
+Provide Attributes: `face/heart_rate`.
+
+Requires: `face/dense_landmarks`.
+
+Parameters:
+- `window_samples` (int, default `300`): Number of frames in the sliding estimation window.
+
 ### TinyHR (ONNX-based)
 
 RhythmFormer ONNX heart rate estimation engine. Converts face-frame sequences into BVP signals using a deep neural network, then applies long-window BVP fusion and Welch spectral analysis for stable heart-rate output.
@@ -60,7 +72,7 @@ Provide Attributes: `face/heart_rate`.
 
 Requires: `face/detection`.
 
-Available model: `heartrate.onnx`.
+Available model: `seeta-hertz-tinyhr.onnx`.
 
 Parameters:
 - `fps` (float, default `30`): Expected camera/video FPS.

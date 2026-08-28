@@ -1,0 +1,33 @@
+version: '1.0'
+module:
+  uid: ca43f6b9-8dcc-48fc-9b15-4bc157177788
+  name: AdaChrom
+  version: 0.0.1
+  description: 'Estimate heart rate from camera/video continuous frames.'
+  keywords:
+    - Face
+    - Selection
+  requirements:
+    - seetapsych-hertz
+    - numpy>=2.2.6
+    - opencv-python>=4.13
+    - scipy>=1.15.3
+packages:
+  - uid: 3d98f435-d484-4b91-acf4-f690c28b409f
+    name: AdaChrom
+    version: 0.0.1
+    usage_models: []
+    inputs: []
+    provides:
+      - face/heart_rate
+    requires:
+      - face/dense_landmarks
+    entry:
+      method: seetapsych_hertz.ada_chrom.package.load
+    parameters:
+      - name: window_samples
+        text: Window Samples
+        description: Window samples to estimate heart rate
+        type: integer
+        value: 300
+    models: []

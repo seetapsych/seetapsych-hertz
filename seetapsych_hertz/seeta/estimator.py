@@ -16,7 +16,7 @@ from .signal import extract_signal
 class HeartRateResult(TypedDict, total=False):
     fps: float
     wait_seconds: float
-    hr: float
+    hr_bpm: float
 
 
 class Estimator(object):
@@ -90,7 +90,7 @@ class Estimator(object):
         return {
             'fps': self.get_fps(),
             'wait_seconds': 0,
-            'hr': hr,
+            'hr_bpm': hr,
         }
 
     def reset(self):
