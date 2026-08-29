@@ -9,6 +9,11 @@ dependencies = [
     "seetapsych-lib",
 ]
 
+[project.urls]
+Homepage = "https://github.com/seetapsych/seetapsych-hertz"
+Repository = "https://github.com/seetapsych/seetapsych-hertz"
+Issues = "https://github.com/seetapsych/seetapsych-hertz/issues"
+
 [project.optional-dependencies]
 all = [
     "numpy>=2.2.6",
