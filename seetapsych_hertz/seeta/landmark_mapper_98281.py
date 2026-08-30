@@ -12,7 +12,7 @@ class LandmarkMapper:
     # ==========================================
     # 1. Core mapping algorithm (98 -> 81, piecewise interpolation)
     # ==========================================
-    def resample_curve(self, points, num_target_points, kind='linear'):
+    def resample_curve(self, points: np.ndarray, num_target_points: int, kind: str = "linear") -> np.ndarray:
         """
         Uniformly resample (interpolate) a curve based on arc length.
         Fix: when the curve length is close to zero, generate uniformly
@@ -24,7 +24,7 @@ class LandmarkMapper:
                 # along the diagonal direction to avoid overlap.
                 result = np.zeros((num_target_points, 2))
                 for i in range(num_target_points):
-                    offset = (i - (num_target_points-1)/2) * 2  # Small offset
+                    offset = (i - (num_target_points - 1) / 2) * 2  # Small offset
                     result[i] = points[0] + offset
                 return result
             return np.zeros((num_target_points, 2))
@@ -43,7 +43,7 @@ class LandmarkMapper:
                 # All points overlap; generate points with diagonal offsets.
                 result = np.zeros((num_target_points, 2))
                 for i in range(num_target_points):
-                    offset = (i - (num_target_points-1)/2) * 2
+                    offset = (i - (num_target_points - 1) / 2) * 2
                     result[i] = points[0] + offset
                 return result
             direction = direction / np.linalg.norm(direction)
@@ -57,12 +57,12 @@ class LandmarkMapper:
         interpolator = interp1d(t_normalized, points, axis=0, kind=kind)
         t_target = np.linspace(0, 1, num_target_points)
 
-        return interpolator(t_target)
+        return np.asarray(interpolator(t_target))
 
     # ==========================================
     # 2. **Core correction**: nose semantic mapping and geometric estimation
     # ==========================================
-    def generate_nose_81_interpolated(self, pts98):
+    def generate_nose_81_interpolated(self, pts98: np.ndarray) -> np.ndarray:
         """
         Semantic alignment: reconstruct the 12 nose landmarks [35-46]
         shown in Figure 1.
@@ -72,9 +72,7 @@ class LandmarkMapper:
         """
         # [Key geometric anchor definitions]
         n51 = pts98[51]  # Top of the nasal root
-        n52 = pts98[52]  # Midpoint of the nasal bridge
         n53 = pts98[53]  # Lower part of the nasal bridge
-        n54 = pts98[54]  # Front of the nose tip
 
         n55 = pts98[55]  # Leftmost point of the left ala (Alare Left)
         n56 = pts98[56]  # Middle of the left ala (Nose Tip)
@@ -101,35 +99,35 @@ class LandmarkMapper:
         # Jawline semantic alignment
         # Figure 1 point 36 (center of the nose base):
         # semantically matches 98-point n57 (Subnasale).
-        nose_pts_81[36-35] = n57
+        nose_pts_81[36 - 35] = n57
 
         # Figure 1 point 41 (outermost point of the left ala):
         # semantically matches 98-point n55.
-        nose_pts_81[41-35] = n55
+        nose_pts_81[41 - 35] = n55
 
         # Figure 1 point 42 (outermost point of the right ala):
         # semantically matches 98-point n59.
-        nose_pts_81[42-35] = n59
+        nose_pts_81[42 - 35] = n59
 
         # Figure 1 point 43 (midpoint of the left ala):
         # semantically matches 98-point n56.
-        nose_pts_81[43-35] = n56
+        nose_pts_81[43 - 35] = n56
 
         # Figure 1 point 44 (midpoint of the right ala):
         # semantically matches 98-point n58.
-        nose_pts_81[44-35] = n58
+        nose_pts_81[44 - 35] = n58
 
         # Figure 1 point 35 (middle section of the nasal bridge):
         # semantically matches 98-point n52.
-        nose_pts_81[35-35] = n53
+        nose_pts_81[35 - 35] = n53
 
         # Figure 1 point 45 (left nostril):
         # semantically matches 98-point n56 (estimated).
-        nose_pts_81[45-35] = n56
+        nose_pts_81[45 - 35] = n56
 
         # Figure 1 point 46 (right nostril):
         # semantically matches 98-point n58 (estimated).
-        nose_pts_81[46-35] = n58
+        nose_pts_81[46 - 35] = n58
 
         # ----------------------------------------------------------------------
         # B. Geometrically estimated points
@@ -143,19 +141,19 @@ class LandmarkMapper:
         # point 37 (upper right nasal root).
         # Semantics: located at the Y-axis height of n51 and expanded horizontally.
         width_high = base_width_vector * bridge_width_factor
-        nose_pts_81[38-35] = n51 + 0.5 * width_high
-        nose_pts_81[37-35] = n51 - 0.5 * width_high
+        nose_pts_81[38 - 35] = n51 + 0.5 * width_high
+        nose_pts_81[37 - 35] = n51 - 0.5 * width_high
 
         width_high = base_width_vector * bridge_width_factor * 2
-        nose_pts_81[39-35] = n53 + 0.5 * width_high
-        nose_pts_81[40-35] = n53 - 0.5 * width_high
+        nose_pts_81[39 - 35] = n53 + 0.5 * width_high
+        nose_pts_81[40 - 35] = n53 - 0.5 * width_high
 
         return nose_pts_81
 
     # ==========================================
     # 3. Overall mapping pipeline (combines all facial regions)
     # ==========================================
-    def map_98_to_81(self, landmarks_98):
+    def map_98_to_81(self, landmarks_98: np.ndarray) -> np.ndarray:
         """
         High-precision geometric mapping pipeline from 98 to 81 landmarks,
         with the nose region reconstructed as the core correction.
@@ -165,8 +163,6 @@ class LandmarkMapper:
         landmarks_81_pred = np.zeros((81, 2))
 
         # [Eyes and pupils] (rigid alignment) - excellent semantic correspondence
-        left_eye = np.vstack((pts[60:68], pts[96]))
-        right_eye = np.vstack((pts[68:76], pts[97]))
 
         # Map the left eye
         landmarks_81_pred[0] = pts[96]
@@ -192,8 +188,6 @@ class LandmarkMapper:
 
         # [Eyebrows] (dimensionality reduction/resampling 9 -> 8)
         # Eyebrow geometry is consistent.
-        left_brow = pts[33:42]
-        right_brow = pts[42:51]
 
         # Map the left eyebrow
         landmarks_81_pred[18] = pts[33]
@@ -214,7 +208,6 @@ class LandmarkMapper:
         landmarks_81_pred[31] = pts[49]
         landmarks_81_pred[32] = pts[45]
         landmarks_81_pred[33] = pts[47]
-
 
         # [Nose] (core correction: reconstruction of 12 landmarks)
         nose = self.generate_nose_81_interpolated(pts)
@@ -248,7 +241,6 @@ class LandmarkMapper:
         landmarks_81_pred[73:81] = face_contour[-2:-10:-1]
 
         assert len(landmarks_81_pred) == 81, (
-            f"Incorrect number of generated landmarks: "
-            f"expected 81, got {len(landmarks_81_pred)}"
+            f"Incorrect number of generated landmarks: expected 81, got {len(landmarks_81_pred)}"
         )
         return landmarks_81_pred

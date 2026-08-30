@@ -12,7 +12,7 @@ class LandmarkMapper:
     # ==========================================
     # 1. Core mapping algorithm (280 -> 81, piecewise interpolation)
     # ==========================================
-    def resample_curve(self, points, num_target_points, kind='linear'):
+    def resample_curve(self, points: np.ndarray, num_target_points: int, kind: str = "linear") -> np.ndarray:
         """
         Uniformly resample (interpolate) a curve based on arc length.
         Fix: when the curve length is close to zero, generate uniformly
@@ -59,12 +59,12 @@ class LandmarkMapper:
         interpolator = interp1d(t_normalized, points, axis=0, kind=kind)
         t_target = np.linspace(0, 1, num_target_points)
 
-        return interpolator(t_target)
+        return np.asarray(interpolator(t_target))
 
     # ==========================================
     # 2. **Core correction**: nose semantic mapping and geometric estimation
     # ==========================================
-    def generate_nose_81_interpolated(self, pts280):
+    def generate_nose_81_interpolated(self, pts280: np.ndarray) -> np.ndarray:
         """
         Semantic alignment: reconstruct the 12 nose landmarks [35-46]
         shown in Figure 1.
@@ -74,10 +74,7 @@ class LandmarkMapper:
         geometrically.
         """
         # [Key geometric anchor definitions]
-        n43 = pts280[43]  # Top of the nasal root
         n44 = pts280[44]  # Midpoint of the nasal bridge
-        n45 = pts280[45]  # Lower part of the nasal bridge
-        n46 = pts280[46]  # Front of the nose tip
 
         n82 = pts280[82]  # Leftmost point of the left ala (Alare Left)
         n47 = pts280[47]  # Middle of the left ala (Nose Tip)
@@ -87,21 +84,8 @@ class LandmarkMapper:
 
         n78 = pts280[78]  # Top-left point of the nasal bridge
         n79 = pts280[79]  # Top-right point of the nasal bridge
-
-        n78 = pts280[78]  # Top-left point of the nasal bridge
-        n79 = pts280[79]  # Top-right point of the nasal bridge
         n80 = pts280[80]  # Lower-middle left point of the nasal bridge
         n81 = pts280[81]  # Lower-middle right point of the nasal bridge
-
-        # Horizontal reference vector used to estimate the width
-        # (for example, the distance between the inner eye corners).
-        # Here, the nose-base width between points 82 and 83 is used directly
-        # because it provides a relatively stable estimate.
-        base_width_vector = n83 - n82
-
-        # Standard facial proportion: the nasal root width is approximately
-        # 0.5-0.6 times the nose-base width.
-        bridge_width_factor = 0.6
 
         nose_pts_81 = np.zeros((12, 2))
 
@@ -153,7 +137,7 @@ class LandmarkMapper:
     # ==========================================
     # 3. Overall mapping pipeline (combines all facial regions)
     # ==========================================
-    def map_280_to_81(self, landmarks_280):
+    def map_280_to_81(self, landmarks_280: np.ndarray) -> np.ndarray:
         """
         High-precision geometric mapping pipeline from 280 to 81 landmarks,
         with a redesigned nose reconstruction procedure.
@@ -163,8 +147,6 @@ class LandmarkMapper:
         landmarks_81_pred = np.zeros((81, 2))
 
         # [Eyes and pupils] (rigid alignment) - excellent semantic correspondence
-        left_eye = np.vstack((pts[60:68], pts[96]))
-        right_eye = np.vstack((pts[68:76], pts[97]))
 
         # Map the left eye
         landmarks_81_pred[0] = pts[74]
@@ -243,8 +225,7 @@ class LandmarkMapper:
         landmarks_81_pred[73:81] = face_contour[-2:-10:-1]
 
         assert len(landmarks_81_pred) == 81, (
-            f"Incorrect number of generated landmarks: "
-            f"expected 81, got {len(landmarks_81_pred)}"
+            f"Incorrect number of generated landmarks: expected 81, got {len(landmarks_81_pred)}"
         )
 
         return landmarks_81_pred

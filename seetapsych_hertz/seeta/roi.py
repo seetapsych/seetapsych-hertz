@@ -4,7 +4,9 @@ import cv2
 import numpy
 
 
-def initialize_roi(points81: numpy.ndarray) -> tuple[numpy.ndarray, numpy.ndarray, tuple[int, int], tuple[int, int]]:
+def initialize_roi(
+    points81: numpy.ndarray,
+) -> tuple[numpy.ndarray, numpy.ndarray, tuple[int, int], tuple[int, int]]:
     """
     Initialize facial ROI polygons and bounding box from 81 landmarks.
 
@@ -31,18 +33,18 @@ def initialize_roi(points81: numpy.ndarray) -> tuple[numpy.ndarray, numpy.ndarra
     delta1 = int(length / 4.5)
     delta2 = length // 50
 
-    cheek_points: list[tuple[int, int]] = []
+    cheek_points_list: list[tuple[int, int]] = []
 
-    cheek_points.append((int(points[0, 0]), int(points[0, 1] + delta1)))
+    cheek_points_list.append((int(points[0, 0]), int(points[0, 1] + delta1)))
 
     for i in range(65, 73):
-        cheek_points.append((int(points[i, 0] + delta2), int(points[i, 1])))
+        cheek_points_list.append((int(points[i, 0] + delta2), int(points[i, 1])))
 
     for i in range(80, 72, -1):
-        cheek_points.append((int(points[i, 0] - delta2), int(points[i, 1])))
+        cheek_points_list.append((int(points[i, 0] - delta2), int(points[i, 1])))
 
-    cheek_points.append((int(points[9, 0]), int(points[9, 1] + delta1)))
-    cheek_points = numpy.asarray(cheek_points, dtype=numpy.int32)
+    cheek_points_list.append((int(points[9, 0]), int(points[9, 1] + delta1)))
+    cheek_points = numpy.asarray(cheek_points_list, dtype=numpy.int32)
 
     left_x = int(numpy.min(cheek_points[:, 0]))
     left_y = int(numpy.min(cheek_points[:, 1]))
@@ -58,7 +60,8 @@ def initialize_roi(points81: numpy.ndarray) -> tuple[numpy.ndarray, numpy.ndarra
 
     mouth_indices = [46, 50, 48, 51, 47, 59, 55, 58]
     mouth_points = numpy.asarray(
-        [(int(points[index, 0]), int(points[index, 1])) for index in mouth_indices], dtype=numpy.int32
+        [(int(points[index, 0]), int(points[index, 1])) for index in mouth_indices],
+        dtype=numpy.int32,
     )
 
     return cheek_points, mouth_points, (left_x, left_y), (right_x, right_y)
@@ -68,14 +71,9 @@ def landmarks_visible(points81: numpy.ndarray, width: int, height: int, threshol
     """
     Check whether enough landmarks are inside image.
     """
-    inside = (
-            (points81[:, 0] >= 0)
-            & (points81[:, 0] < width)
-            & (points81[:, 1] >= 0)
-            & (points81[:, 1] < height)
-    )
+    inside = (points81[:, 0] >= 0) & (points81[:, 0] < width) & (points81[:, 1] >= 0) & (points81[:, 1] < height)
 
-    return numpy.mean(inside) >= threshold
+    return bool(numpy.mean(inside) >= threshold)
 
 
 def extract_roi(image: numpy.ndarray, points81: numpy.ndarray) -> tuple[numpy.ndarray | None, numpy.ndarray | None]:
@@ -194,5 +192,5 @@ def main():
     pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

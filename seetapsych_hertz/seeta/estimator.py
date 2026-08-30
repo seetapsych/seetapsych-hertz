@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from typing import TypedDict, Optional
-
+from typing import TypedDict
 
 import numpy
 
-
 from .hr import compute_heart_beat
-from .landmark_mapper_280281 import LandmarkMapper as LandmarkMapper280
 from .landmark_mapper_98281 import LandmarkMapper as LandmarkMapper98
+from .landmark_mapper_280281 import LandmarkMapper as LandmarkMapper280
 from .roi import extract_roi
 from .signal import extract_signal
 
@@ -21,10 +19,10 @@ class HeartRateResult(TypedDict, total=False):
 
 class Estimator(object):
     def __init__(
-            self,
-            min_seconds: float | None = None,
-            min_frames: int | None = None,
-            max_frames: int | None = None,
+        self,
+        min_seconds: float | None = None,
+        min_frames: int | None = None,
+        max_frames: int | None = None,
     ):
         if min_seconds is None:
             min_seconds = 1
@@ -52,21 +50,21 @@ class Estimator(object):
         if num_points == 81:
             pass
         elif num_points == 98:
-            mapper = LandmarkMapper98()
-            point2ds = mapper.map_98_to_81(point2ds)
+            mapper_98 = LandmarkMapper98()
+            point2ds = mapper_98.map_98_to_81(point2ds)
         elif num_points == 280:
-            mapper = LandmarkMapper280()
-            point2ds = mapper.map_280_to_81(point2ds)
+            mapper_280 = LandmarkMapper280()
+            point2ds = mapper_280.map_280_to_81(point2ds)
         else:
-            raise RuntimeError('Number landmarks must be 81/280')
+            raise RuntimeError("Number landmarks must be 81/280")
 
         roi_image, signal_mask = extract_roi(input_data, point2ds)
         if roi_image is None or signal_mask is None:
             # treat like no face
             self.reset()
             return {
-                'fps': self.get_fps(),
-                'wait_seconds': self.get_wait_time(),
+                "fps": self.get_fps(),
+                "wait_seconds": self.get_wait_time(),
             }
 
         signal = extract_signal(roi_image, signal_mask)
@@ -81,26 +79,26 @@ class Estimator(object):
 
         if wait_time > 0:
             return {
-                'fps': self.get_fps(),
-                'wait_seconds': float(wait_time),
+                "fps": self.get_fps(),
+                "wait_seconds": float(wait_time),
             }
 
         hr = compute_heart_beat(self.__signal)
 
         return {
-            'fps': self.get_fps(),
-            'wait_seconds': 0,
-            'hr_bpm': hr,
+            "fps": self.get_fps(),
+            "wait_seconds": 0,
+            "hr_bpm": hr,
         }
 
     def reset(self):
         self.__signal = numpy.zeros([0, 4], dtype=numpy.float64)
 
     def __append_signal(
-            self,
-            signal_time: float,
-            signal: numpy.ndarray,
-    ) -> None:
+        self,
+        signal_time: float,
+        signal: numpy.ndarray,
+    ):
         """
         Append one signal sample and maintain the maximum signal window size.
 
@@ -112,9 +110,7 @@ class Estimator(object):
         signal = numpy.asarray(signal, dtype=numpy.float64).reshape(-1)
 
         if signal.shape != (3,):
-            raise ValueError(
-                f'Signal must have shape [3], got {signal.shape}'
-            )
+            raise ValueError(f"Signal must have shape [3], got {signal.shape}")
 
         sample = numpy.empty([1, 4], dtype=numpy.float64)
         sample[0, 0] = signal_time
@@ -123,8 +119,7 @@ class Estimator(object):
         self.__signal = numpy.concatenate([self.__signal, sample], axis=0)
 
         if len(self.__signal) > self.__signal_max_frames:
-            self.__signal = self.__signal[-self.__signal_max_frames:]
-
+            self.__signal = self.__signal[-self.__signal_max_frames :]
 
     def get_wait_time(self) -> float:
         """
@@ -157,9 +152,11 @@ class Estimator(object):
             # FPS cannot be estimated reliably with fewer than two samples.
             window_wait = time_wait
 
-        return max(
-            time_wait,
-            window_wait,
+        return float(
+            max(
+                time_wait,
+                window_wait,
+            )
         )
 
     def get_fps(self) -> float:
@@ -187,5 +184,5 @@ def main():
     pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

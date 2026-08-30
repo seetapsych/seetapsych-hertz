@@ -28,11 +28,11 @@ from seetapsych_lib.runtime.factory import Factory
 from seetapsych_lib.runtime.pipeline import Pipeline
 
 factory = Factory()
-factory.load_file_modules('seetapsych_hertz/modules/seeta.yml')
+factory.load_file_modules("seetapsych_hertz/modules/seeta.yml")
 
 pipeline = Pipeline(factory, ...)
 
-pipeline.add_attributes('face/heart_rate')
+pipeline.add_attributes("face/heart_rate")
 ```
 
 ## Introduction

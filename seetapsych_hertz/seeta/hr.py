@@ -21,9 +21,7 @@ def _generate_interp_times(start: float, end: float, step: float) -> numpy.ndarr
     return numpy.asarray(result, dtype=numpy.float64)
 
 
-def _cubic_spline_interp_1d(
-        values: numpy.ndarray, times: numpy.ndarray, target_times: numpy.ndarray
-) -> numpy.ndarray:
+def _cubic_spline_interp_1d(values: numpy.ndarray, times: numpy.ndarray, target_times: numpy.ndarray) -> numpy.ndarray:
     """
     Cubic spline interpolation for one-dimensional signals.
 
@@ -37,12 +35,12 @@ def _cubic_spline_interp_1d(
     n = len(values)
 
     if n < 2:
-        raise ValueError('At least two samples are required')
+        raise ValueError("At least two samples are required")
 
     h = numpy.diff(times)
 
     if numpy.any(h <= 0):
-        raise ValueError('Timestamps must be strictly increasing')
+        raise ValueError("Timestamps must be strictly increasing")
 
     # Calculate second derivatives for natural cubic spline.
     second = numpy.zeros(n, dtype=numpy.float64)
@@ -74,7 +72,7 @@ def _cubic_spline_interp_1d(
             for i in range(inner - 2, -1, -1):
                 second[i + 1] = d[i] - c[i] * second[i + 2]
 
-    index = numpy.searchsorted(times, target_times, side='right') - 1
+    index = numpy.searchsorted(times, target_times, side="right") - 1
     index = numpy.clip(index, 0, n - 2)
 
     dt = target_times - times[index]
@@ -82,21 +80,23 @@ def _cubic_spline_interp_1d(
 
     a0 = values[index]
     a1 = (
-            (values[index + 1] - values[index]) / hi
-            - hi * second[index] / 2.0
-            - hi * (second[index + 1] - second[index]) / 6.0
+        (values[index + 1] - values[index]) / hi
+        - hi * second[index] / 2.0
+        - hi * (second[index + 1] - second[index]) / 6.0
     )
     a2 = second[index] / 2.0
     a3 = (second[index + 1] - second[index]) / (6.0 * hi)
 
-    return a0 + a1 * dt + a2 * dt ** 2 + a3 * dt ** 3
+    return numpy.asarray(a0 + a1 * dt + a2 * dt**2 + a3 * dt**3)
 
 
 def _gaussian_blur_1d(signal: numpy.ndarray) -> numpy.ndarray:
     """
     Apply one-dimensional Gaussian smoothing.
     """
-    return cv2.GaussianBlur(signal.reshape(1, -1), (3, 1), 1, 1).reshape(-1)
+    signal_2d = numpy.asarray(signal.reshape(1, -1), dtype=numpy.float64)
+    blurred = cv2.GaussianBlur(signal_2d, (3, 1), sigmaX=1.0, sigmaY=1.0)
+    return numpy.asarray(blurred.reshape(-1))
 
 
 def _chrominance_method(signal: numpy.ndarray) -> numpy.ndarray:
@@ -117,7 +117,7 @@ def _chrominance_method(signal: numpy.ndarray) -> numpy.ndarray:
     y = 1.5 * r + g - 1.5 * b
     alpha = numpy.std(x) / numpy.std(y)
 
-    return x - alpha * y
+    return numpy.asarray(x - alpha * y)
 
 
 def compute_heart_beat(signal: numpy.ndarray) -> float:
@@ -138,7 +138,7 @@ def compute_heart_beat(signal: numpy.ndarray) -> float:
     signal = numpy.asarray(signal, dtype=numpy.float64)
 
     if signal.ndim != 2 or signal.shape[1] != 4:
-        raise ValueError(f'Invalid signal shape: {signal.shape}')
+        raise ValueError(f"Invalid signal shape: {signal.shape}")
 
     sample_count = signal.shape[0]
 
@@ -156,7 +156,8 @@ def compute_heart_beat(signal: numpy.ndarray) -> float:
     interp_times = _generate_interp_times(timestamps[0], timestamps[-1], step)
 
     interp_signal = numpy.stack(
-        [_cubic_spline_interp_1d(signal[:, channel], timestamps, interp_times) for channel in range(1, 4)], axis=0
+        [_cubic_spline_interp_1d(signal[:, channel], timestamps, interp_times) for channel in range(1, 4)],
+        axis=0,
     )
 
     # Smooth color channel signals.
@@ -170,8 +171,6 @@ def compute_heart_beat(signal: numpy.ndarray) -> float:
 
     # Normalize signal amplitude.
     smean = numpy.mean(pulse_signal)
-    smax = numpy.max(pulse_signal)
-    smin = numpy.min(pulse_signal)
 
     # Keep the original normalization behavior.
     # The dynamic scale calculation is reserved for future evaluation.
@@ -206,5 +205,5 @@ def main():
     pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
