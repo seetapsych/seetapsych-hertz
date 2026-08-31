@@ -2,11 +2,11 @@ version: '1.0'
 module:
   uid: ca43f6b9-8dcc-48fc-9b15-4bc157177788
   name: AdaChrom
-  version: 0.0.1
-  description: 'Estimate heart rate from camera/video continuous frames.'
+  version: '1.0'
+  description: 'Model-free rPPG heart rate estimation using adaptive chrominance analysis on skin ROI.'
   keywords:
-    - Face
-    - Selection
+    - Heart Rate
+    - rPPG
   requirements:
     - seetapsych-hertz
     - numpy>=2.2.6
@@ -14,9 +14,9 @@ module:
     - scipy>=1.15.3
 packages:
   - uid: 3d98f435-d484-4b91-acf4-f690c28b409f
-    name: AdaChrom
-    description: Adaptive chrominance-based rPPG heart rate estimation, no model required
-    version: 0.0.1
+    name: HeartRate-AdaChrom
+    description: Adaptive chrominance rPPG heart rate estimator from adaptive forehead ROI, no neural model required
+    version: '1.0.1'
     usage_models: []
     inputs: []
     provides:
@@ -28,7 +28,7 @@ packages:
     parameters:
       - name: window_samples
         text: Window Samples
-        description: Window samples to estimate heart rate
+        description: Sliding window frame count for HR estimation. Larger values reduce noise but increase latency; adjust based on real-time demand.
         type: integer
         value: 300
     models: []

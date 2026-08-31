@@ -2,11 +2,11 @@ version: '1.0'
 module:
   uid: 4b49524d-00cd-4a14-988c-a35ad51bf157
   name: SeetaHeartRateDetector
-  version: 0.0.1
-  description: 'Estimate heart rate from camera/video continuous frames.'
+  version: '1.0'
+  description: 'Traditional signal-processing heart rate estimation from forehead skin pixels via chrominance + FFT analysis.'
   keywords:
-    - Face
-    - Selection
+    - Heart Rate
+    - Signal Processing
   requirements:
     - seetapsych-hertz
     - numpy>=2.2.6
@@ -14,9 +14,9 @@ module:
     - scipy>=1.15.3
 packages:
   - uid: 08e29e70-e21b-4ef2-8486-5aaec5f8295b
-    name: SeetaHeartRateDetector
-    description: Signal-processing heart rate estimator using forehead ROI from dense landmarks
-    version: 0.0.1
+    name: HeartRate-Seeta
+    description: Signal-processing heart rate estimator using forehead ROI from dense landmarks with chrominance + FFT peak detection
+    version: '1.0'
     usage_models: []
     inputs: []
     provides:
@@ -28,17 +28,17 @@ packages:
     parameters:
       - name: min_seconds
         text: Min Seconds
-        description: Min seconds to start heart rate estimation
+        description: Minimum buffered signal duration (seconds) before producing first HR estimate. Lower for faster startup, higher for stability.
         type: number
         value: 1
       - name: min_frames
         text: Min Frames
-        description: Min frames to start heart rate estimation
+        description: Minimum frame count before HR estimation starts. Takes effect whichever is reached later between min_seconds and min_frames.
         type: integer
         value: 10
       - name: max_frames
         text: Max Frames
-        description: Max frames to keep in algorithm to estimate heart rate
+        description: Maximum frames kept in the sliding analysis window. Larger windows smooth outliers but increase response lag to true HR changes.
         type: integer
         value: 300
     models: []

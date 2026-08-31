@@ -2,11 +2,11 @@ version: '1.0'
 module:
   uid: 0faf2236-2f76-44c0-be75-ad95fc5f5322
   name: TinyHR
-  version: 0.0.1
-  description: 'Estimate heart rate from camera/video continuous frames.'
+  version: '1.0'
+  description: 'Lightweight neural network for fast heart rate estimation directly from face video frames.'
   keywords:
-    - Face
     - Heart Rate
+    - rPPG
   requirements:
     - seetapsych-hertz
     - numpy>=2.2.6
@@ -19,9 +19,9 @@ module:
     - onnxruntime-gpu<1.24; sys_platform != 'darwin' and python_version <= '3.10'
 packages:
   - uid: 23871da8-0968-4034-ac48-35641ae67d63
-    name: TinyHR
-    description: Fast heart rate estimation from face video frames via lightweight ONNX neural network
-    version: 0.0.1
+    name: HeartRate-TinyHR
+    description: Fast RhythmFormer heart rate estimator using buffered face crops plus Welch spectral analysis
+    version: '1.0'
     usage_models: []
     inputs: []
     provides:
@@ -33,18 +33,18 @@ packages:
     parameters:
       - name: fps
         text: FPS
-        description: Camera/Video expecting FPS
+        description: Expected camera/video FPS used for spectral analysis windowing. Mismatch with actual source FPS degrades HR accuracy.
         type: number
         value: 30
       - name: interval
         text: Interval
-        description: Interval seconds to estimate heart rate
+        description: Seconds between consecutive HR estimates. Smaller intervals yield more updates with higher jitter; larger intervals are smoother but slower.
         type: number
         value: 1
     models:
       - uid: c745a157-cb59-4fb7-bce6-97b38ad416ab
         name: seeta-hertz-tinyhr.onnx
-        version: 0.0.1
+        version: '1.0'
         recommended: true
         download:
           index: seeta-hertz-tinyhr.onnx

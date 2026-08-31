@@ -23,6 +23,7 @@ seetapsych-webui --files seetapsych_hertz/modules/seeta.yml
 ### Programmatic Usage
 
 Add the following code in your program to use this algorithm module.
+
 ```python
 from seetapsych_lib.runtime.factory import Factory
 from seetapsych_lib.runtime.pipeline import Pipeline
@@ -35,45 +36,87 @@ pipeline = Pipeline(factory, ...)
 pipeline.add_attributes("face/heart_rate")
 ```
 
-## Introduction
+### Module Catalog
 
-### SeetaHeartRateDetector (Signal-based)
+| Module YAML Path | Package Name |
+|---|---|
+| `seetapsych_hertz/modules/ada-chrom.yml` | HeartRate-AdaChrom |
+| `seetapsych_hertz/modules/seeta.yml` | HeartRate-Seeta |
+| `seetapsych_hertz/modules/tiny-hr.yml` | HeartRate-TinyHR |
 
-Traditional signal-processing-based heart rate estimation. Extracts ROI from facial dense landmarks, then applies chrominance analysis with cubic spline interpolation and FFT frequency-domain peak detection to estimate heart rate from BGR channel signals.
+### AdaChrom
 
-Module config: [seeta.yml](seetapsych_hertz/modules/seeta.yml).
-Provide Attributes: `face/heart_rate`.
+> Model-free rPPG heart rate estimation using adaptive chrominance analysis on skin ROI.
 
-Requires: `face/dense_landmarks`.
+Module config: [ada-chrom.yml](seetapsych_hertz/modules/ada-chrom.yml)
 
-Parameters:
-- `min_seconds` (float, default `1`): Minimum signal duration in seconds before estimation starts.
-- `min_frames` (int, default `10`): Minimum number of frames before estimation starts.
-- `max_frames` (int, default `300`): Maximum frames kept in the sliding signal window.
+| Package | Provides | Requires |
+|---|---|---|
+| HeartRate-AdaChrom | `face/heart_rate` | `face/dense_landmarks` |
 
-### AdaChrom (Adaptive Chrominance)
+**Description**
 
-Adaptive chrominance-based heart rate estimation using frame-wise sliding window analysis. Extracts photoplethysmographic signals from an adaptive forehead skin ROI, processes each frame with chrominance methods to produce real-time BPM output without FFT fusion.
+Adaptive chrominance rPPG heart rate estimator from adaptive forehead ROI, no neural model required.
 
-Module config: [ada-chrom.yml](seetapsych_hertz/modules/ada-chrom.yml).
-Provide Attributes: `face/heart_rate`.
+**Parameters**
 
-Requires: `face/dense_landmarks`.
+| Name | Type | Default | Description & Tuning |
+|---|---|---|---|
+| `window_samples` | integer | `300` | Sliding window frame count for HR estimation. Larger values reduce noise but increase latency; adjust based on real-time demand. |
 
-Parameters:
-- `window_samples` (int, default `300`): Number of frames in the sliding estimation window.
+**Models**
 
-### TinyHR (ONNX-based)
+*(None)*
 
-RhythmFormer ONNX heart rate estimation engine. Converts face-frame sequences into BVP signals using a deep neural network, then applies long-window BVP fusion and Welch spectral analysis for stable heart-rate output.
+### SeetaHeartRateDetector
 
-Module config: [tiny-hr.yml](seetapsych_hertz/modules/tiny-hr.yml).
-Provide Attributes: `face/heart_rate`.
+> Traditional signal-processing heart rate estimation from forehead skin pixels via chrominance + FFT analysis.
 
-Requires: `face/detection`.
+Module config: [seeta.yml](seetapsych_hertz/modules/seeta.yml)
 
-Available model: `seeta-hertz-tinyhr.onnx`.
+| Package | Provides | Requires |
+|---|---|---|
+| HeartRate-Seeta | `face/heart_rate` | `face/dense_landmarks` |
 
-Parameters:
-- `fps` (float, default `30`): Expected camera/video FPS.
-- `interval` (float, default `1`): Interval in seconds between heart rate estimations.
+**Description**
+
+Signal-processing heart rate estimator using forehead ROI from dense landmarks with chrominance + FFT peak detection.
+
+**Parameters**
+
+| Name | Type | Default | Description & Tuning |
+|---|---|---|---|
+| `min_seconds` | number | `1` | Minimum buffered signal duration (seconds) before producing first HR estimate. Lower for faster startup, higher for stability. |
+| `min_frames` | integer | `10` | Minimum frame count before HR estimation starts. Takes effect whichever is reached later between min_seconds and min_frames. |
+| `max_frames` | integer | `300` | Maximum frames kept in the sliding analysis window. Larger windows smooth outliers but increase response lag to true HR changes. |
+
+**Models**
+
+*(None)*
+
+### TinyHR
+
+> Lightweight neural network for fast heart rate estimation directly from face video frames.
+
+Module config: [tiny-hr.yml](seetapsych_hertz/modules/tiny-hr.yml)
+
+| Package | Provides | Requires |
+|---|---|---|
+| HeartRate-TinyHR | `face/heart_rate` | `face/detection` |
+
+**Description**
+
+Fast RhythmFormer heart rate estimator using buffered face crops + Welch spectral analysis.
+
+**Parameters**
+
+| Name | Type | Default | Description & Tuning |
+|---|---|---|---|
+| `fps` | number | `30` | Expected camera/video FPS used for spectral analysis windowing. Mismatch with actual source FPS degrades HR accuracy. |
+| `interval` | number | `1` | Seconds between consecutive HR estimates. Smaller intervals yield more updates with higher jitter; larger intervals are smoother but slower. |
+
+**Models**
+
+| Model | Recommended |
+|---|---|
+| `seeta-hertz-tinyhr.onnx` | ✓ |
