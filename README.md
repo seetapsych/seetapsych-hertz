@@ -68,32 +68,6 @@ Adaptive chrominance rPPG heart rate estimator from adaptive forehead ROI, no ne
 
 *(None)*
 
-### SeetaHeartRateDetector
-
-> Traditional signal-processing heart rate estimation from forehead skin pixels via chrominance + FFT analysis.
-
-Module config: [seeta.yml](seetapsych_hertz/modules/seeta.yml)
-
-| Package | Provides | Requires |
-|---|---|---|
-| HeartRate-Seeta | `face/heart_rate` | `face/dense_landmarks` |
-
-**Description**
-
-Signal-processing heart rate estimator using forehead ROI from dense landmarks with chrominance + FFT peak detection.
-
-**Parameters**
-
-| Name | Type | Default | Description & Tuning |
-|---|---|---|---|
-| `min_seconds` | number | `1` | Minimum buffered signal duration (seconds) before producing first HR estimate. Lower for faster startup, higher for stability. |
-| `min_frames` | integer | `10` | Minimum frame count before HR estimation starts. Takes effect whichever is reached later between min_seconds and min_frames. |
-| `max_frames` | integer | `300` | Maximum frames kept in the sliding analysis window. Larger windows smooth outliers but increase response lag to true HR changes. |
-
-**Models**
-
-*(None)*
-
 ### TinyHR
 
 > Lightweight neural network for fast heart rate estimation directly from face video frames.
