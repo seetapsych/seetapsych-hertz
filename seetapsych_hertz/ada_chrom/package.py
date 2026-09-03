@@ -12,23 +12,30 @@ from .lib.framewise_estimator import FrameDetailResult, FramewiseHeartRateEstima
 from .lib.landmark_utils import FrameLandmarks
 
 
+def _is_valid_bpm(value: float | None) -> bool:
+    return value is not None and numpy.isfinite(value) and value > 0.0
+
+
 class Instance(api.Instance):
     def __init__(
         self,
         device: api.Device,
         estimator_config: EstimatorConfig | None = None,
         window_samples: int | None = None,
+        roi_regions: list[str] | None = None,
     ):
         base_config = estimator_config or DEFAULT_ESTIMATOR_CONFIG
-        roi_regions = ["skin_b_adaptive_forehead"]
 
         if window_samples is None:
             window_samples = base_config.window_samples
+        if not roi_regions:
+            roi_regions = ["skin_b_adaptive_forehead"]
 
         estimator_config = replace(
             base_config,
             roi_regions=tuple(roi_regions),
             window_samples=window_samples,
+            hr_update_stride=1,
             enable_fft_fusion=False,
         )
 
@@ -85,17 +92,16 @@ class Instance(api.Instance):
 
         result: FrameDetailResult = self.__estimator.process_frame(image, frame_landmarks)
 
-        # hr_available, hr_value = self._resolve_hr(result)
-        hr_value_raw = cast(Any, result.hr_results.get("roi_skin_b_adaptive_forehead_hr_bpm", 0))
-        hr_value = float(hr_value_raw) if hr_value_raw is not None else 0.0
-        hr_available = numpy.isfinite(hr_value) and hr_value > 0.0
+        hr_value, roi_hr_values = self._resolve_hr(result)
+        hr_available = _is_valid_bpm(hr_value)
 
         if hr_available:
             return {
                 "face_heart_rate": {
                     "fps": current_fps,
                     "wait_seconds": 0.0,
-                    "hr_bpm": float(hr_value),
+                    "hr_bpm": hr_value,
+                    "roi_hr_bpm": roi_hr_values,
                 }
             }
 
@@ -113,39 +119,38 @@ class Instance(api.Instance):
         self.__frame_count = 0
         self.__timestamps.clear()
 
-    def _resolve_hr(self, result: FrameDetailResult) -> tuple[bool, float]:
-        hr_value = float(result.hr_value_fusion)
-        if numpy.isfinite(hr_value) and hr_value > 0.0:
-            return True, hr_value
+    def _resolve_hr(self, result: FrameDetailResult) -> tuple[float | None, dict[str, float]]:
+        hr_value: float | None = None
+        roi_hr_values: dict[str, float] = {}
 
+        # summary roi
         for name in self.__estimator.roi_names:
             status_key = f"roi_{name}_status"
             hr_key = f"roi_{name}_hr_bpm"
-            if str(result.hr_results.get(status_key)) == "ok":
-                try:
-                    raw_val = cast(Any, result.hr_results.get(hr_key))
-                    val = float(raw_val) if raw_val is not None else 0.0
-                    if numpy.isfinite(val) and val > 0.0:
-                        return True, val
-                except (TypeError, ValueError):
-                    continue
 
-        for mode in self.__estimator.active_fusion_modes:
-            from .lib.fft_fusion import fft_fusion_output_prefix
+            hr_status = cast(str, result.hr_results.get(status_key, ""))
+            if hr_status != "ok":
+                continue
 
-            prefix = fft_fusion_output_prefix(mode)
-            status_key = f"{prefix}_status"
-            hr_key = f"{prefix}_hr_bpm"
-            if str(result.hr_results.get(status_key)) == "ok":
-                try:
-                    raw_val = cast(Any, result.hr_results.get(hr_key))
-                    val = float(raw_val) if raw_val is not None else 0.0
-                    if numpy.isfinite(val) and val > 0.0:
-                        return True, val
-                except (TypeError, ValueError):
-                    continue
+            roi_hr_value = cast(float | None, result.hr_results.get(hr_key))
+            if _is_valid_bpm(roi_hr_value):
+                roi_hr_values[name] = cast(float, roi_hr_value)
 
-        return False, 0.0
+        # get fusion hr value or mean of roi hr values
+        try:
+            fusion_hr_value = float(result.hr_value_fusion)
+            if _is_valid_bpm(fusion_hr_value):
+                hr_value = fusion_hr_value
+        except (TypeError, ValueError):
+            pass
+
+        if hr_value is None:
+            if not roi_hr_values:
+                return None, {}
+
+            hr_value = float(numpy.mean(list(roi_hr_values.values())))
+
+        return hr_value, roi_hr_values
 
     def _get_fps(self) -> float:
         size = len(self.__timestamps)
@@ -182,10 +187,12 @@ class Package(api.Package):
         **kwargs: Any,
     ) -> Instance:
         window_samples: int | None = parameters.get("window_samples", None)
+        roi_regions: list[str] | None = cast(list[str] | None, parameters.get("roi_regions", None))
 
         return Instance(
             api.Device("cpu") if device is None else device,
             window_samples=window_samples,
+            roi_regions=roi_regions,
         )
 
 

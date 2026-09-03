@@ -31,4 +31,10 @@ packages:
         description: Sliding window frame count for HR estimation. Larger values reduce noise but increase latency; adjust based on real-time demand.
         type: integer
         value: 300
+      - name: roi_regions
+        text: ROI Regions
+        description: List of regions to use for HR estimation. Defaults to ["skin_b_adaptive_forehead"].
+        type: selection[]
+        value: ["skin_b_adaptive_forehead"]
+        selection: ["skin_all", "skin_legacy", "skin_a_fixed_forehead", "skin_b_adaptive_forehead", "skin_c_connected_components"]
     models: []
