@@ -15,20 +15,25 @@ module_roots = [
 
 
 def main():
-    factory = Factory()
+    factory = Factory(disable_default=True)
     for root in module_roots:
         factory.load_dir_modules(root)
+    factory.load_default_modules()
 
     pipeline = Pipeline(
         factory,
         packages=[
-            # '08e29e70-e21b-4ef2-8486-5aaec5f8295b', # SeetaHeartRateDetector
             # '23871da8-0968-4034-ac48-35641ae67d63', # TinyHR
             "3d98f435-d484-4b91-acf4-f690c28b409f",  # AdaChrom
         ],
     )
 
     pipeline.solve()
+
+    package = pipeline.get_package(provide="face/heart_rate")
+    assert package is not None
+    pipeline.set_parameters(package.uid, {"roi_regions": ["skin_b_adaptive_forehead"]})
+
     pipeline.install_requirements()
     pipeline.cache_models()
 

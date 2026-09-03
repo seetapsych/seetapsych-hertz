@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 import time
 from dataclasses import replace
 from pathlib import Path
@@ -16,6 +17,12 @@ def _is_valid_bpm(value: float | None) -> bool:
     return value is not None and numpy.isfinite(value) and value > 0.0
 
 
+def _need_fft(roi_regions: list[str]) -> bool:
+    if "skin_all" in roi_regions:
+        return True
+    return len(roi_regions) >= 2
+
+
 class Instance(api.Instance):
     def __init__(
         self,
@@ -31,17 +38,20 @@ class Instance(api.Instance):
         if not roi_regions:
             roi_regions = ["skin_b_adaptive_forehead"]
 
+        enable_fft_fusion = _need_fft(roi_regions)
         estimator_config = replace(
             base_config,
             roi_regions=tuple(roi_regions),
             window_samples=window_samples,
             hr_update_stride=1,
-            enable_fft_fusion=False,
+            enable_fft_fusion=enable_fft_fusion,
+            fft_fusion_mode="bandpower-normalized",
         )
 
         self.__device = device
         self.__estimator_config: EstimatorConfig = estimator_config
         self.__window_samples: int = int(estimator_config.window_samples)
+        self.__enable_fft_fusion: bool = enable_fft_fusion
         self.__estimator = FramewiseHeartRateEstimator(
             config=estimator_config,
         )
@@ -59,7 +69,7 @@ class Instance(api.Instance):
             return {
                 "face_heart_rate": {
                     "fps": self._get_fps(),
-                    "wait_seconds": self._get_wait_time(),
+                    "wait_seconds": self._get_wait_time(None),
                 }
             }
 
@@ -108,7 +118,7 @@ class Instance(api.Instance):
         return {
             "face_heart_rate": {
                 "fps": current_fps,
-                "wait_seconds": self._get_wait_time(),
+                "wait_seconds": self._get_wait_time(result),
             }
         }
 
@@ -136,6 +146,10 @@ class Instance(api.Instance):
             if _is_valid_bpm(roi_hr_value):
                 roi_hr_values[name] = cast(float, roi_hr_value)
 
+        if self.__enable_fft_fusion:
+            hr_value = cast(float | None, result.hr_results.get("fft_fusion_bandpower_norm_hr_bpm"))
+            return hr_value, roi_hr_values
+
         # get fusion hr value or mean of roi hr values
         try:
             fusion_hr_value = float(result.hr_value_fusion)
@@ -152,6 +166,25 @@ class Instance(api.Instance):
 
         return hr_value, roi_hr_values
 
+    def _min_valid_samples(self, result: FrameDetailResult | None) -> int:
+        if result is None:
+            return 0
+
+        count: int | None = None
+        for name in self.__estimator.roi_names:
+            valid_key = f"roi_{name}_valid_samples"
+            valid_samples = cast(int | None, result.hr_results.get(valid_key, None))
+            if valid_samples is None:
+                continue
+            if count is None:
+                count = valid_samples
+            count = min(count, valid_samples)
+
+        if count is None:
+            return 0
+
+        return count
+
     def _get_fps(self) -> float:
         size = len(self.__timestamps)
         if size <= 1:
@@ -161,14 +194,13 @@ class Instance(api.Instance):
             return 0.0
         return float((size - 1) / duration)
 
-    def _get_wait_time(self) -> float:
-        # Rough estimate only: use received frame count vs window_samples
-        received = self.__frame_count
-        need = self.__window_samples
-        if received >= need:
+    def _get_wait_time(self, result: FrameDetailResult | None) -> float:
+        # Rough estimate only: use valid frame count vs window_samples
+        valid_samples = self._min_valid_samples(result)
+        if valid_samples >= self.__window_samples:
             return 0.0
 
-        remaining = need - received
+        remaining = self.__window_samples - valid_samples
 
         fps = self._get_fps()
         if fps <= 0:

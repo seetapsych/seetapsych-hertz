@@ -58,6 +58,12 @@ Module config: [ada-chrom.yml](seetapsych_hertz/modules/ada-chrom.yml)
 
 Adaptive chrominance rPPG heart rate estimator. Accepts multiple ROI selectors; the default forehead-only adaptive skin mask (`skin_b_adaptive_forehead`) matches the original delivery configuration, while the preset group `all` runs every available region.
 
+**Usage Notes**
+
+- Supports both video streams and video files.
+- For video stream mode, best results are achieved at 30 FPS or higher, which requires optimized processing logic and better hardware (with GPU).
+- For stable analysis results, it is recommended to use video files with a stable frame rate of 30 FPS or higher.
+
 **Parameters**
 
 | Name | Type | Default | Description & Tuning |
@@ -87,6 +93,12 @@ Module config: [tiny-hr.yml](seetapsych_hertz/modules/tiny-hr.yml)
 **Description**
 
 Fast RhythmFormer heart rate estimator using buffered face crops + Welch spectral analysis.
+
+**Usage Notes**
+
+- Supports both video streams and video files.
+- For video stream processing, frame rates close to 30 or 25 FPS yield the best results.
+- For stable analysis results, it is recommended to use video files with a frame rate of 30 FPS or 25 FPS.
 
 **Parameters**
 
