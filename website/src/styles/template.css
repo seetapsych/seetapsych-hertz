@@ -1,0 +1,13 @@
+/*
+ * Local design tokens inspired by Academic Project Page Template.
+ * Upstream provenance and license are recorded in THIRD_PARTY_NOTICES.md.
+ */
+
+:root {
+  --template-content-max: 1180px;
+  --template-reading-max: 760px;
+  --template-radius: 18px;
+  --template-soft-shadow: 0 20px 56px rgb(7 25 43 / 12%);
+  --template-card-shadow: 0 12px 28px rgb(7 25 43 / 8%);
+  --template-section-space: clamp(4.5rem, 8vw, 7.5rem);
+}

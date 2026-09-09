@@ -1,0 +1,18 @@
+---
+import { site } from '../data/site';
+---
+
+<header class="site-header">
+  <nav class="container site-nav" aria-label="Primary navigation">
+    <a class="brand" href="#top">{site.brand}</a>
+    <div class="nav-links" aria-label="Page sections">
+      <a href="#demo">Demo</a>
+      <a href="#method">How it works</a>
+      <a href="#results">Results</a>
+      <a href="#resources">Resources</a>
+    </div>
+    <a class="github-link" href={site.repoUrl} target="_blank" rel="noopener noreferrer" aria-label="Open the GitHub repository in a new tab">
+      GitHub <span aria-hidden="true">↗</span>
+    </a>
+  </nav>
+</header>

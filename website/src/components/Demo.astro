@@ -1,0 +1,34 @@
+---
+import { site } from '../data/site';
+---
+
+<section class="section demo-section" id="demo" aria-labelledby="demo-title">
+  <div class="container">
+    <div class="section-heading demo-heading">
+      <p class="eyebrow eyebrow-dark">SEE IT IN ACTION</p>
+      <h2 id="demo-title">From facial video to a pulse waveform.</h2>
+      <p>Watch the recorded TinyHR pipeline: facial video, a predicted rPPG waveform, and heart-rate estimates displayed together.</p>
+    </div>
+
+    <div class="demo-player-wrap">
+      <video
+        class="media-video demo-video"
+        src={site.demoUrl}
+        poster={site.posterUrl}
+        width="856"
+        height="480"
+        controls
+        playsinline
+        preload="none"
+        aria-label="TinyHR recorded demonstration"
+      >
+        Your browser does not support embedded video. Download the demo to watch it locally.
+      </video>
+      <div class="demo-meta">
+        <span>25-second recording · Silent playback</span>
+        <a class="text-link text-link-dark" href={site.demoUrl} download>Download demo video <span aria-hidden="true">↓</span></a>
+      </div>
+      <p class="demo-disclaimer">This recording illustrates the pipeline. Accuracy is reported separately in the evaluation below.</p>
+    </div>
+  </div>
+</section>

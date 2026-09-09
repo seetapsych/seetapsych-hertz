@@ -1,0 +1,72 @@
+---
+import MethodFigure from './MethodFigure.astro';
+import { site } from '../data/site';
+
+const modules = [
+  {
+    number: '01',
+    title: 'Frame Difference Fusion Stem',
+    copy: 'Four neighboring-frame difference maps are concatenated into a 12-channel representation. The final model uses this difference branch without the original RGB appearance branch. A 5 × 5 convolution, batch normalization, ReLU, pooling, and a 3 × 3 convolution produce 16-channel spatial features.',
+  },
+  {
+    number: '02',
+    title: 'Spatial Patch Embedding',
+    copy: 'A frame-wise 2D convolution with kernel size 4 and stride 4 reduces each feature map from 32 × 32 to 8 × 8, with 32 channels. Batch normalization and ReLU follow. The temporal dimension is preserved.',
+  },
+  {
+    number: '03',
+    title: 'Multi-scale Temporal Feature Block',
+    copy: 'A single convolutional stage enhances spatial features and pools them into a temporal sequence. Four branches combine information from different temporal offsets, followed by pointwise fusion and a temporal feed-forward network. Residual connections retain the input features; no hierarchical temporal downsampling is used.',
+  },
+  {
+    number: '04',
+    title: 'Waveform Predictor',
+    copy: 'Spatial global average pooling and two pointwise convolutional layers produce a single-channel rPPG waveform. The output contains one value per input frame: 160 samples for a 160-frame clip. Heart rate is computed after waveform prediction.',
+  },
+];
+---
+
+<section class="section method-section" id="method" aria-labelledby="method-title">
+  <div class="container">
+    <div class="section-heading method-heading">
+      <p class="eyebrow eyebrow-dark">FROM VIDEO TO PULSE</p>
+      <h2 id="method-title">How TinyHR works</h2>
+      <p>Remote photoplethysmography (rPPG) estimates pulse-related signals from subtle changes in light reflected by facial skin. TinyHR processes a clip of {site.inputFrames} RGB facial frames at {site.inputSize} × {site.inputSize} pixels. Its lightweight convolutional pipeline emphasizes differences between neighboring frames, builds compact spatial features, and combines temporal information at multiple scales. The network predicts one rPPG waveform sample per video frame. Heart rate is then calculated from the predicted waveform using filtering and spectral analysis.</p>
+      <p class="source-note"><a href={`${site.reportUrl}#page=1`} target="_blank" rel="noopener noreferrer" aria-label="Open the method description in the technical report in a new tab">Method description: TinyHR technical report, pages 1–6. <span aria-hidden="true">↗</span></a></p>
+    </div>
+
+    <MethodFigure />
+
+    <div class="module-intro">
+      <p class="source-note"><a href={`${site.reportUrl}#page=1`} target="_blank" rel="noopener noreferrer" aria-label="Open the architecture details in the technical report in a new tab">Architecture details: technical report, pages 1–3. <span aria-hidden="true">↗</span></a></p>
+    </div>
+    <ol class="module-grid">
+      {modules.map((module) => (
+        <li>
+          <p class="module-number">{module.number}</p>
+          <h3>{module.title}</h3>
+          <p>{module.copy}</p>
+        </li>
+      ))}
+    </ol>
+
+    <div class="inference-panel">
+      <div>
+        <p class="eyebrow eyebrow-dark">INFERENCE</p>
+        <h3>From waveform to heart rate</h3>
+      </div>
+      <div>
+        <p>During inference, a second-order Butterworth band-pass filter retains frequencies from 0.75 to 2.5 Hz. Welch's method estimates the power spectral density of the filtered waveform. The dominant frequency is converted to beats per minute.</p>
+        <p class="formula"><code>Heart rate (BPM) = 60 × dominant frequency (Hz)</code></p>
+        <p class="source-note"><a href={`${site.reportUrl}#page=6`} target="_blank" rel="noopener noreferrer" aria-label="Open the inference procedure in the technical report in a new tab">Inference procedure: technical report, page 6. <span aria-hidden="true">↗</span></a></p>
+      </div>
+    </div>
+
+    <details class="training-details">
+      <summary>Training objectives</summary>
+      <p>Training combines a negative Pearson correlation objective for waveform agreement, a frequency-domain cross-entropy objective, and a KL-divergence objective for heart-rate distributions. The reported weights are 0.2, 1.0, and 1.0, respectively.</p>
+      <p class="formula"><code>L = 0.2 L<sub>time</sub> + L<sub>CE</sub> + L<sub>KL</sub></code></p>
+      <p class="source-note"><a href={`${site.reportUrl}#page=3`} target="_blank" rel="noopener noreferrer" aria-label="Open the training objectives in the technical report in a new tab">Training objectives: technical report, pages 3–6. <span aria-hidden="true">↗</span></a></p>
+    </details>
+  </div>
+</section>

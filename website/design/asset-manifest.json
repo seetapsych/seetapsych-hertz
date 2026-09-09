@@ -1,0 +1,72 @@
+{
+  "sources": [
+    {
+      "path": "design/source/tinyhr-flowchart-web.pptx",
+      "bytes": 352159,
+      "sha256": "cd618e40f73d3ab79dcb1f3304c74759c47c4ba02e16d47d797ac87e9ce35174",
+      "note": "Web export working copy. Preserves the supplied diagram and adjusts its slide canvas so the complete schematic exports without clipping."
+    }
+  ],
+  "assets": [
+    {
+      "path": "public/downloads/tinyhr-technical-report.pdf",
+      "bytes": 416343,
+      "sha256": "a8ff7c929bf49cee620e80b6d3de5041599e1602ea0fbffaf303cfa1137199ef"
+    },
+    {
+      "path": "public/media/demo-full.mp4",
+      "bytes": 608313,
+      "sha256": "9f4d6b7138c10dfb878b621f7c4da11590f1c3d826533f28f8b22bc4cf8f3099",
+      "durationSeconds": 25.083333,
+      "streams": [
+        {
+          "codec_name": "h264",
+          "codec_type": "video",
+          "width": 856,
+          "height": 480,
+          "pix_fmt": "yuv420p",
+          "r_frame_rate": "24/1"
+        }
+      ]
+    },
+    {
+      "path": "public/media/demo-poster.jpg",
+      "bytes": 74626,
+      "sha256": "da8491a9935c767f7d148788689cc9b50b40b93281eb425fe7f53982ee4f63ef",
+      "width": 856,
+      "height": 480
+    },
+    {
+      "path": "public/media/hero-preview.mp4",
+      "bytes": 326644,
+      "sha256": "f07d1f6e1cbdf5cf6ec451a2b44295ca1fe14d17d0e9d274495cfe90322261cd",
+      "durationSeconds": 12.0,
+      "streams": [
+        {
+          "codec_name": "h264",
+          "codec_type": "video",
+          "width": 856,
+          "height": 480,
+          "pix_fmt": "yuv420p",
+          "r_frame_rate": "24/1"
+        }
+      ]
+    },
+    {
+      "path": "public/downloads/tinyhr-flowchart.pdf",
+      "bytes": 276735,
+      "sha256": "afb13d680a61b99f89e6956653261bd18633aff2abf6aaf7295bb731a90c1ca9",
+      "derivedFrom": "design/source/tinyhr-flowchart-web.pptx",
+      "pages": 1,
+      "pageSizePoints": "1584 x 630"
+    },
+    {
+      "path": "public/media/tinyhr-flowchart.png",
+      "bytes": 556779,
+      "sha256": "fe5a207a6c6983bc57558b9f305de27da25fd037aa6fa4d13eff8a141ecba67c",
+      "derivedFrom": "public/downloads/tinyhr-flowchart.pdf",
+      "width": 3200,
+      "height": 1273
+    }
+  ]
+}

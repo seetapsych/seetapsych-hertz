@@ -1,0 +1,21 @@
+{
+  "name": "seetapsych-hertz-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev --host 127.0.0.1",
+    "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview --host 127.0.0.1",
+    "check": "ASTRO_TELEMETRY_DISABLED=1 astro build"
+  },
+  "devDependencies": {
+    "astro": "5.0.0",
+    "typescript": "5.9.3"
+  },
+  "overrides": {
+    "@babel/types": "7.28.5",
+    "@babel/helper-string-parser": "7.27.1",
+    "@babel/helper-validator-identifier": "7.28.5"
+  }
+}
