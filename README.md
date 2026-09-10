@@ -48,7 +48,7 @@ pipeline.add_attributes("face/heart_rate")
 
 > Model-free rPPG heart rate estimation using adaptive chrominance analysis on skin ROI.
 
-Module config: [ada-chrom.yml](seetapsych_hertz/modules/ada-chrom.yml)
+Module config: [ada-chrom.yml](https://github.com/seetapsych/seetapsych-hertz/blob/main/seetapsych_hertz/modules/ada-chrom.yml)
 
 | Package | Provides | Requires |
 |---|---|---|
@@ -84,7 +84,7 @@ The per-region results requested via `roi_regions` are returned inside `roi_hr_b
 
 > Lightweight neural network for fast heart rate estimation directly from face video frames.
 
-Module config: [tiny-hr.yml](seetapsych_hertz/modules/tiny-hr.yml)
+Module config: [tiny-hr.yml](https://github.com/seetapsych/seetapsych-hertz/blob/main/seetapsych_hertz/modules/tiny-hr.yml)
 
 | Package | Provides | Requires |
 |---|---|---|
