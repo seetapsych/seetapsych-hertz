@@ -11,9 +11,9 @@ facial video.
 [**Technical report**](website/public/downloads/tinyhr-technical-report.pdf) ·
 [**Architecture PDF**](website/public/downloads/tinyhr-flowchart.pdf)
 
-[![TinyHR recorded demo showing facial video, a predicted pulse waveform, and heart-rate estimates](website/public/media/demo-poster.jpg)](website/public/media/demo-full.mp4)
+[![TinyHR recorded demo showing facial video, a predicted pulse waveform, and heart-rate estimates](website/public/media/tinyhr-demo.gif)](website/public/media/demo-full.mp4)
 
-*Recorded demo · click the preview to watch the full video*
+*Animated 12-second preview · click it to watch the full video*
 
 </div>
 
