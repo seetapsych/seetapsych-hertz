@@ -1,0 +1,52 @@
+---
+import { site } from '../data/site';
+---
+
+<section class="hero" id="top" aria-labelledby="hero-title">
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <p class="eyebrow">SEETAPSYCH HERTZ / TINYHR</p>
+      <h1 id="hero-title">See the pulse.<br />Through video.</h1>
+      <p class="hero-description">A lightweight model that recovers pulse waveforms and estimates heart rate from facial video.</p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="#demo">Watch demo</a>
+        <a class="button button-secondary" href={site.repoUrl} target="_blank" rel="noopener noreferrer" aria-label="Open the code on GitHub in a new tab">
+          Code on GitHub <span aria-hidden="true">↗</span>
+        </a>
+        <a class="text-link text-link-light" href={site.reportUrl} target="_blank" rel="noopener noreferrer" aria-label="Open the technical report in a new tab">Technical report <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+
+    <div class="hero-stage">
+      <p class="stage-label">RECORDED DEMO · 12-SECOND PREVIEW</p>
+      <video
+        class="media-video hero-video"
+        data-hero-video
+        src={site.heroPreviewUrl}
+        poster={site.posterUrl}
+        width="856"
+        height="480"
+        controls
+        muted
+        loop
+        playsinline
+        preload="none"
+        aria-label="TinyHR recorded preview"
+      >
+        Your browser does not support video playback. <a href={site.heroPreviewUrl} download>Download the preview video.</a>
+      </video>
+      <p class="stage-caption">Facial video, a predicted pulse waveform, and heart-rate estimates in one recorded demonstration.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  const heroVideo = document.querySelector<HTMLVideoElement>('[data-hero-video]');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  if (heroVideo && !reduceMotion.matches) {
+    heroVideo.play().catch(() => {
+      // Browsers may require an explicit user gesture. Native controls remain available.
+    });
+  }
+</script>

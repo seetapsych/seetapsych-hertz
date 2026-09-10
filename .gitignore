@@ -35,3 +35,7 @@ __pycache__/
 # models
 *.onnx
 *.safetensors
+
+.DS_Store
+
+.DS_Store

@@ -1,0 +1,31 @@
+---
+import { site } from '../data/site';
+---
+
+<section class="section resources-section" id="resources" aria-labelledby="resources-title">
+  <div class="container">
+    <div class="section-heading">
+      <h2 id="resources-title">Explore the project</h2>
+      <p>Find the source code, setup instructions, and technical documentation.</p>
+    </div>
+
+    <div class="resource-list">
+      <a class="resource-row" href={site.repoUrl} target="_blank" rel="noopener noreferrer" aria-label="Open the GitHub repository in a new tab">
+        <span><strong>GitHub</strong><small>Source code, setup, and usage instructions.</small></span>
+        <b>View repository <span aria-hidden="true">↗</span></b>
+      </a>
+      <a class="resource-row" href={site.reportUrl} download>
+        <span><strong>Technical report</strong><small>Architecture, training objectives, and reported evaluation.</small></span>
+        <b>Download report PDF <span aria-hidden="true">↓</span></b>
+      </a>
+      <a class="resource-row" href={site.flowchartPdfUrl} download>
+        <span><strong>Architecture diagram</strong><small>The supplied pipeline schematic in PDF format.</small></span>
+        <b>Download architecture PDF <span aria-hidden="true">↓</span></b>
+      </a>
+      <div class="resource-row resource-row-static">
+        <span><strong>Hugging Face</strong><small>Model distribution and interactive demos are planned.</small></span>
+        <b>Planned</b>
+      </div>
+    </div>
+  </div>
+</section>

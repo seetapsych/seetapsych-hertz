@@ -1,6 +1,91 @@
-# SeetaPsych Hertz
+<div align="center">
 
-> Heart rate estimation modules for SeetaPsych
+# SeetaPsych Hertz / TinyHR
+
+## See the pulse. Through video.
+
+A lightweight model that recovers pulse waveforms and estimates heart rate from
+facial video.
+
+[**Watch demo**](website/public/media/demo-full.mp4) ·
+[**Technical report**](website/public/downloads/tinyhr-technical-report.pdf) ·
+[**Architecture PDF**](website/public/downloads/tinyhr-flowchart.pdf)
+
+[![TinyHR recorded demo showing facial video, a predicted pulse waveform, and heart-rate estimates](website/public/media/tinyhr-demo.gif)](website/public/media/demo-full.mp4)
+
+*Animated 12-second preview · click it to watch the full video*
+
+</div>
+
+## See it in action
+
+### From facial video to a pulse waveform
+
+The recorded TinyHR pipeline presents facial video, a predicted rPPG waveform,
+and heart-rate estimates together. The recording illustrates the pipeline;
+accuracy is reported separately in the evaluation below.
+
+## From video to pulse
+
+### How TinyHR works
+
+Remote photoplethysmography (rPPG) estimates pulse-related signals from subtle
+changes in light reflected by facial skin. TinyHR processes a clip of 160 RGB
+facial frames at 128 × 128 pixels. Its lightweight convolutional pipeline
+emphasizes differences between neighboring frames, builds compact spatial
+features, and combines temporal information at multiple scales. The network
+predicts one rPPG waveform sample per video frame. Heart rate is then calculated
+from the predicted waveform using filtering and spectral analysis.
+
+[![TinyHR architecture and inference flow](website/public/media/tinyhr-flowchart.png)](website/public/downloads/tinyhr-flowchart.pdf)
+
+*Click the diagram to open the architecture PDF.*
+
+| Stage | Module | Function |
+|---:|---|---|
+| 01 | Frame Difference Fusion Stem | Converts four neighboring-frame difference maps into compact spatial features. |
+| 02 | Spatial Patch Embedding | Reduces each feature map from 32 × 32 to 8 × 8 while preserving time. |
+| 03 | Multi-scale Temporal Feature Block | Combines temporal information at different offsets with residual feature fusion. |
+| 04 | Waveform Predictor | Produces one rPPG waveform value for every input frame. |
+
+### From waveform to heart rate
+
+During inference, a second-order Butterworth band-pass filter retains frequencies
+from 0.75 to 2.5 Hz. Welch's method estimates the power spectral density of the
+filtered waveform, and the dominant frequency is converted to beats per minute.
+
+```text
+Heart rate (BPM) = 60 × dominant frequency (Hz)
+```
+
+Training combines waveform agreement, frequency-domain classification, and
+heart-rate distribution objectives:
+
+```text
+L = 0.2 L_time + L_CE + L_KL
+```
+
+## Evaluation
+
+### Reported performance
+
+| Mean absolute error | Dataset | Test split | Input |
+|---:|---|---|---|
+| **3.88 BPM** | VIPL-HR V1 | 22 subjects · 485 videos | 160 frames · 128 × 128 |
+
+This is author-reported performance on the held-out test set described in the
+[TinyHR technical report](website/public/downloads/tinyhr-technical-report.pdf).
+It is not a per-video error bound.
+
+## Explore the project
+
+| Resource | Description |
+|---|---|
+| [Source code](#usage) | Setup and usage instructions |
+| [Full demo](website/public/media/demo-full.mp4) | Recorded TinyHR pipeline |
+| [Technical report](website/public/downloads/tinyhr-technical-report.pdf) | Architecture, training objectives, and evaluation |
+| [Architecture diagram](website/public/downloads/tinyhr-flowchart.pdf) | Full pipeline schematic in PDF format |
+| Hugging Face | Model distribution and interactive demos are planned |
 
 ## Usage
 

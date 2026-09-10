@@ -1,0 +1,18 @@
+export const site = {
+  brand: 'SeetaPsych Hertz',
+  model: 'TinyHR',
+  repoUrl: 'https://github.com/seetapsych/seetapsych-hertz',
+  maeBpm: '3.88',
+  dataset: 'VIPL-HR V1',
+  subjects: 22,
+  videos: 485,
+  reportPage: 7,
+  inputFrames: 160,
+  inputSize: 128,
+  reportUrl: '/downloads/tinyhr-technical-report.pdf',
+  flowchartPdfUrl: '/downloads/tinyhr-flowchart.pdf',
+  flowchartImageUrl: '/media/tinyhr-flowchart.png',
+  heroPreviewUrl: '/media/hero-preview.mp4',
+  demoUrl: '/media/demo-full.mp4',
+  posterUrl: '/media/demo-poster.jpg',
+} as const;

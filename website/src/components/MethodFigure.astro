@@ -1,0 +1,65 @@
+---
+import { site } from '../data/site';
+---
+
+<figure class="architecture-figure">
+  <a
+    class="architecture-image-link"
+    href={site.flowchartPdfUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Open the TinyHR architecture PDF in a new tab"
+  >
+    <img
+      src={site.flowchartImageUrl}
+      width="3200"
+      height="1273"
+      loading="lazy"
+      decoding="async"
+      alt="Supplied TinyHR pipeline schematic showing facial video input, feature extraction, waveform prediction, and heart-rate post-processing."
+    />
+  </a>
+
+  <div class="figure-actions" aria-label="Architecture diagram actions">
+    <a class="button button-compact" href={site.flowchartPdfUrl} target="_blank" rel="noopener noreferrer" aria-label="Open the architecture PDF in a new tab">
+      Open architecture PDF <span aria-hidden="true">↗</span>
+    </a>
+    <a class="text-link text-link-dark" href={site.flowchartPdfUrl} download>Download architecture PDF <span aria-hidden="true">↓</span></a>
+  </div>
+
+  <figcaption>
+    Architecture schematic supplied with the project. Some labels differ from the technical report; the description below follows the report.
+  </figcaption>
+
+  <details class="architecture-details" data-pdf-details>
+    <summary>View PDF inline</summary>
+    <iframe
+      class="architecture-viewer"
+      data-pdf-viewer
+      data-src={site.flowchartPdfUrl}
+      title="TinyHR architecture PDF"
+      loading="lazy"
+    ></iframe>
+  </details>
+
+  <details class="architecture-details discrepancy-details">
+    <summary>Diagram and report differences</summary>
+    <p>The supplied diagram includes hierarchical/TPT labels, an RGB branch, overlapping patches, an MLP projection label, and first-order filtering. The technical report describes a single convolutional MTF stage, difference-only input processing, kernel-4/stride-4 spatial embedding, a pointwise convolutional waveform predictor, and second-order filtering. The diagram is preserved as supplied; the method text follows the report.</p>
+  </details>
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLDetailsElement>('[data-pdf-details]').forEach((details) => {
+    const viewer = details.querySelector<HTMLIFrameElement>('[data-pdf-viewer]');
+
+    details.addEventListener('toggle', () => {
+      if (!details.open || !viewer || viewer.dataset.loaded === 'true') return;
+
+      const source = viewer.dataset.src;
+      if (source) {
+        viewer.src = source;
+        viewer.dataset.loaded = 'true';
+      }
+    });
+  });
+</script>
