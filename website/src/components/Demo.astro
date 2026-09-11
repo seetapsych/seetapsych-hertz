@@ -1,13 +1,17 @@
 ---
 import { site } from '../data/site';
+
+interface Props { lang?: 'en' | 'zh'; }
+const { lang = 'en' } = Astro.props;
+const zh = lang === 'zh';
 ---
 
 <section class="section demo-section" id="demo" aria-labelledby="demo-title">
   <div class="container">
     <div class="section-heading demo-heading">
-      <p class="eyebrow eyebrow-dark">SEE IT IN ACTION</p>
-      <h2 id="demo-title">From facial video to a pulse waveform.</h2>
-      <p>Watch the recorded TinyHR pipeline: facial video, a predicted rPPG waveform, and heart-rate estimates displayed together.</p>
+      <p class="eyebrow eyebrow-dark">{zh ? '实际演示' : 'SEE IT IN ACTION'}</p>
+      <h2 id="demo-title">{zh ? '从人脸视频到脉搏波形。' : 'From facial video to a pulse waveform.'}</h2>
+      <p>{zh ? '观看 TinyHR 完整流程：人脸视频、预测的 rPPG 波形与心率估计同步呈现。' : 'Watch the recorded TinyHR pipeline: facial video, a predicted rPPG waveform, and heart-rate estimates displayed together.'}</p>
     </div>
 
     <div class="demo-player-wrap">
@@ -25,10 +29,10 @@ import { site } from '../data/site';
         Your browser does not support embedded video. Download the demo to watch it locally.
       </video>
       <div class="demo-meta">
-        <span>25-second recording · Silent playback</span>
-        <a class="text-link text-link-dark" href={site.demoUrl} download>Download demo video <span aria-hidden="true">↓</span></a>
+        <span>{zh ? '25 秒录制 · 静音播放' : '25-second recording · Silent playback'}</span>
+        <a class="text-link text-link-dark" href={site.demoUrl} download>{zh ? '下载演示视频' : 'Download demo video'} <span aria-hidden="true">↓</span></a>
       </div>
-      <p class="demo-disclaimer">This recording illustrates the pipeline. Accuracy is reported separately in the evaluation below.</p>
+      <p class="demo-disclaimer">{zh ? '本视频用于展示处理流程；模型精度见下方独立实验结果。' : 'This recording illustrates the pipeline. Accuracy is reported separately in the evaluation below.'}</p>
     </div>
   </div>
 </section>

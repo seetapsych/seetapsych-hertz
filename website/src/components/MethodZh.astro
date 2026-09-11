@@ -1,0 +1,52 @@
+---
+import { site } from '../data/site';
+
+const modules = [
+  ['01', '帧差融合 Stem', '融合相邻帧差异，突出人脸皮肤中与脉搏相关的细微颜色变化。'],
+  ['02', '空间 Patch Embedding', '将逐帧空间特征压缩为紧凑表示，同时保留完整时间序列。'],
+  ['03', '多尺度时间特征块', '通过多个时间偏移分支捕获不同尺度的生理变化并进行残差融合。'],
+  ['04', '波形预测头', '为每个输入帧生成一个 rPPG 波形值，再交给确定性的信号处理管线。'],
+];
+---
+
+<section class="section method-section" id="method" aria-labelledby="method-title">
+  <div class="container">
+    <div class="section-heading method-heading">
+      <p class="eyebrow eyebrow-dark">从视频到脉搏</p>
+      <h2 id="method-title">TinyHR 如何工作</h2>
+      <p>远程光电容积描记（rPPG）从人脸皮肤反射光的细微变化中估计脉搏信号。TinyHR 输入 {site.inputFrames} 帧、{site.inputSize} × {site.inputSize} 像素的人脸视频，通过轻量卷积管线强化相邻帧差异、提取紧凑空间特征并进行多尺度时间建模。模型先预测 rPPG 波形，再通过滤波与频谱分析计算心率。</p>
+      <p class="source-note"><a href={`${site.reportUrl}#page=1`} target="_blank" rel="noopener noreferrer">方法说明：TinyHR 技术报告第 1-6 页。 <span aria-hidden="true">↗</span></a></p>
+    </div>
+
+    <figure class="architecture-figure">
+      <a class="architecture-image-link" href={site.flowchartPdfUrl} target="_blank" rel="noopener noreferrer">
+        <img src={site.flowchartImageUrl} width="3200" height="1273" loading="lazy" decoding="async" alt="TinyHR 人脸视频输入、特征提取、波形预测与心率后处理流程图" />
+      </a>
+      <div class="figure-actions">
+        <a class="button button-compact" href={site.flowchartPdfUrl} target="_blank" rel="noopener noreferrer">打开架构 PDF <span aria-hidden="true">↗</span></a>
+        <a class="text-link text-link-dark" href={site.flowchartPdfUrl} download>下载架构图 <span aria-hidden="true">↓</span></a>
+      </div>
+    </figure>
+
+    <ol class="module-grid">
+      {modules.map(([number, title, copy]) => (
+        <li>
+          <p class="module-number">{number}</p>
+          <h3>{title}</h3>
+          <p>{copy}</p>
+        </li>
+      ))}
+    </ol>
+
+    <div class="inference-panel">
+      <div>
+        <p class="eyebrow">推理</p>
+        <h3>从波形到心率</h3>
+      </div>
+      <div>
+        <p>推理时使用带通滤波保留 0.75-2.5 Hz 的生理频带，再通过 Welch 方法估计功率谱密度，将主频转换为每分钟心跳次数。</p>
+        <p class="formula"><code>心率（BPM）= 60 × 主频（Hz）</code></p>
+      </div>
+    </div>
+  </div>
+</section>

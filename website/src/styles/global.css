@@ -81,7 +81,7 @@ h3 {
 
 h1 {
   margin-bottom: 1.5rem;
-  font-size: clamp(3.35rem, 8.2vw, 7.1rem);
+  font-size: clamp(3.35rem, 7.2vw, 5.8rem);
 }
 
 h2 {
@@ -139,10 +139,32 @@ h3 {
 }
 
 .brand {
+  display: inline-flex;
+  gap: 0.65rem;
+  align-items: center;
   width: fit-content;
   font-size: 1.1rem;
   font-weight: 760;
   letter-spacing: -0.04em;
+}
+
+.brand img {
+  width: 2.15rem;
+  height: 2.15rem;
+  object-fit: contain;
+}
+
+.nav-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-self: end;
+}
+
+.language-link {
+  color: var(--mint);
+  font-size: 0.82rem;
+  font-weight: 760;
 }
 
 .nav-links {
@@ -214,7 +236,7 @@ h3 {
 .hero-inner {
   display: grid;
   justify-items: center;
-  padding-block: clamp(4.75rem, 9vw, 8.5rem) clamp(4.75rem, 9vw, 7.75rem);
+  padding-block: clamp(2.75rem, 5vw, 4.75rem) clamp(4.75rem, 9vw, 7.75rem);
 }
 
 .hero-copy {
@@ -321,7 +343,7 @@ h3 {
 
 .hero-stage {
   width: min(100%, 960px);
-  margin-top: clamp(3.5rem, 7vw, 5.5rem);
+  margin-top: clamp(2rem, 4vw, 3.25rem);
   overflow: hidden;
   color: var(--white);
   background: #020b14;
@@ -379,6 +401,132 @@ h3 {
 
 .demo-section {
   background: #f2f5fb;
+}
+
+.highlights-section {
+  overflow: hidden;
+  background: var(--paper-raised);
+}
+
+.highlights-heading {
+  max-width: 850px;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 3rem;
+}
+
+.metric-card {
+  display: grid;
+  gap: 0.55rem;
+  min-height: 10.5rem;
+  align-content: space-between;
+  padding: 1.4rem;
+  color: var(--white);
+  background: var(--ink);
+  border-radius: var(--template-radius);
+  box-shadow: var(--template-card-shadow);
+}
+
+.metric-card:nth-child(2) {
+  background: var(--blue-deep);
+}
+
+.metric-card:nth-child(3) {
+  color: var(--ink);
+  background: var(--mint);
+}
+
+.metric-card:nth-child(4) {
+  color: var(--ink);
+  background: var(--orange-soft);
+  border: 1px solid rgb(251 95 20 / 24%);
+}
+
+.metric-card strong {
+  font-size: clamp(2rem, 4.5vw, 3.4rem);
+  letter-spacing: -0.06em;
+  line-height: 1;
+}
+
+.metric-card span {
+  font-size: 0.82rem;
+  font-weight: 680;
+  line-height: 1.4;
+}
+
+.latency-note {
+  display: grid;
+  grid-template-columns: minmax(14rem, 0.34fr) minmax(0, 0.66fr);
+  gap: clamp(1.5rem, 5vw, 4rem);
+  margin-top: 1rem;
+  padding: 1.3rem 1.4rem;
+  color: var(--white);
+  background: var(--blue);
+  border-radius: var(--template-radius);
+}
+
+.latency-note strong {
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  line-height: 1.25;
+}
+
+.latency-note p {
+  margin: 0;
+  color: rgb(255 255 255 / 78%);
+  font-size: 0.84rem;
+}
+
+.dataset-panel {
+  display: grid;
+  grid-template-columns: minmax(15rem, 0.34fr) minmax(0, 0.66fr);
+  gap: clamp(2rem, 6vw, 5rem);
+  margin-top: 4.5rem;
+  padding-top: 3rem;
+  border-top: 1px solid var(--line-strong);
+}
+
+.dataset-intro p:last-child {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.dataset-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.dataset-table th,
+.dataset-table td {
+  padding: 0.9rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+
+.dataset-table th {
+  color: var(--muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dataset-table td:nth-child(2),
+.dataset-table td:nth-child(3) {
+  font-variant-numeric: tabular-nums;
+}
+
+.dataset-total td {
+  color: var(--blue-deep);
+  font-weight: 780;
+  border-bottom-color: var(--blue-deep);
 }
 
 .demo-heading {
@@ -801,6 +949,18 @@ a.resource-row:hover {
 }
 
 @media (max-width: 900px) {
+  .metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dataset-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .latency-note {
+    grid-template-columns: 1fr;
+  }
+
   .module-grid {
     gap: 0 2rem;
   }
@@ -851,6 +1011,23 @@ a.resource-row:hover {
 
   .brand {
     font-size: 1rem;
+  }
+
+  .brand img {
+    width: 1.9rem;
+    height: 1.9rem;
+  }
+
+  .language-link {
+    font-size: 0.78rem;
+  }
+
+  .metric-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .metric-card {
+    min-height: 8.5rem;
   }
 
   .hero-inner {

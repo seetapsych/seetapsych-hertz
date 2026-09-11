@@ -1,7 +1,7 @@
 export const site = {
   brand: 'SeetaPsych Hertz',
   model: 'TinyHR',
-  repoUrl: 'https://github.com/seetapsych/seetapsych-hertz',
+  repoUrl: 'https://github.com/3061988077qq-glitch/seetapsych-hertz',
   maeBpm: '3.88',
   dataset: 'VIPL-HR V1',
   subjects: 22,

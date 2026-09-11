@@ -1,0 +1,95 @@
+---
+import { site } from '../data/site';
+
+interface Props {
+  lang?: 'en' | 'zh';
+}
+
+const { lang = 'en' } = Astro.props;
+const zh = lang === 'zh';
+
+const metrics = zh
+  ? [
+      ['4', '训练数据集'],
+      ['6,307', '训练视频'],
+      ['82,177', '模型参数 · ONNX 仅 381 KiB'],
+      ['≈132 ms', 'M4 CPU 实测处理延迟'],
+    ]
+  : [
+      ['4', 'training datasets'],
+      ['6,307', 'training videos'],
+      ['82,177', 'model parameters · 381 KiB ONNX'],
+      ['≈132 ms', 'measured processing latency on M4 CPU'],
+    ];
+
+const datasets = [
+  ['VIPL-HR V1', '85', '1,883', zh ? '训练' : 'Training'],
+  ['VIPL-HR V2', '500', '2,498', zh ? '训练' : 'Training'],
+  ['V4V', '103', '726', zh ? '训练' : 'Training'],
+  ['MCD-rPPG', '600', '1,200', zh ? '训练；仅正脸视频' : 'Training; front-facing only'],
+];
+---
+
+<section class="section highlights-section" id="highlights" aria-labelledby="highlights-title">
+  <div class="container">
+    <div class="section-heading highlights-heading">
+      <p class="eyebrow eyebrow-dark">{zh ? '最大亮点' : 'WHY TINYHR'}</p>
+      <h2 id="highlights-title">{zh ? '更丰富的数据，更轻的模型，更快的响应。' : 'More data. Less model. Faster response.'}</h2>
+      <p>{zh
+        ? 'TinyHR 用四个来源互补的 rPPG 数据集学习跨人群、跨拍摄条件的生理信号，同时将模型压缩到 8.2 万参数。初始窗口准备好后，模型计算远低于一秒，并按默认设置每秒更新一次。'
+        : 'TinyHR learns across people and recording conditions from four complementary rPPG datasets while keeping the network to just 82K parameters. Once the initial window is ready, compute stays well below one second and the estimate updates every second by default.'}</p>
+    </div>
+
+    <div class="metric-grid">
+      {metrics.map(([value, label]) => (
+        <div class="metric-card">
+          <strong>{value}</strong>
+          <span>{label}</span>
+        </div>
+      ))}
+    </div>
+
+    <div class="latency-note">
+      <strong>{zh ? '首次结果约 5.3 秒，之后每秒刷新。' : 'First result in ≈5.3 seconds, then refreshed every second.'}</strong>
+      <p>{zh
+        ? '30 FPS 下先收集 160 帧；窗口准备好后，TinyHR 在 Apple M4 CPU 上实测平均处理时间约 132 ms。测试包含输入归一化、ONNX 推理与心率后处理，不含摄像头采集和人脸检测。'
+        : 'At 30 FPS, TinyHR first collects 160 frames. Once the window is ready, measured processing averages about 132 ms on an Apple M4 CPU, including input normalization, ONNX inference, and heart-rate post-processing but excluding capture and face detection.'}</p>
+    </div>
+
+    <div class="dataset-panel" id="datasets">
+      <div class="dataset-intro">
+        <p class="eyebrow eyebrow-dark">{zh ? '训练数据' : 'TRAINING DATA'}</p>
+        <h3>{zh ? '1,288 名受试者，6,307 段视频' : '1,288 subjects. 6,307 videos.'}</h3>
+        <p>{zh
+          ? '多来源数据覆盖不同人群和记录条件，为模型学习更稳健的 rPPG 表征提供基础。'
+          : 'Multiple sources broaden the range of people and recording conditions available for learning robust rPPG representations.'}</p>
+      </div>
+      <div class="table-scroll">
+        <table class="dataset-table">
+          <thead>
+            <tr>
+              <th>{zh ? '数据集' : 'Dataset'}</th>
+              <th>{zh ? '受试者' : 'Subjects'}</th>
+              <th>{zh ? '视频' : 'Videos'}</th>
+              <th>{zh ? '用途' : 'Usage'}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {datasets.map((row) => (
+              <tr>{row.map((cell) => <td>{cell}</td>)}</tr>
+            ))}
+            <tr class="dataset-total">
+              <td>{zh ? '合计' : 'Total'}</td>
+              <td>1,288</td>
+              <td>6,307</td>
+              <td>{zh ? '四来源训练数据' : 'Four-source corpus'}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="source-note">{zh
+        ? <>独立测试：VIPL-HR V1，22 名受试者、485 段视频；MAE 3.88 BPM。数据来自<a href={`${site.reportUrl}#page=6`} target="_blank" rel="noopener noreferrer">技术报告第 6-7 页 <span aria-hidden="true">↗</span></a>。</>
+        : <>Held-out evaluation: VIPL-HR V1, 22 subjects and 485 videos; MAE 3.88 BPM. Data from the <a href={`${site.reportUrl}#page=6`} target="_blank" rel="noopener noreferrer">technical report, pages 6-7 <span aria-hidden="true">↗</span></a>.</>}</p>
+    </div>
+  </div>
+</section>

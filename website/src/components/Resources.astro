@@ -1,30 +1,34 @@
 ---
 import { site } from '../data/site';
+
+interface Props { lang?: 'en' | 'zh'; }
+const { lang = 'en' } = Astro.props;
+const zh = lang === 'zh';
 ---
 
 <section class="section resources-section" id="resources" aria-labelledby="resources-title">
   <div class="container">
     <div class="section-heading">
-      <h2 id="resources-title">Explore the project</h2>
-      <p>Find the source code, setup instructions, and technical documentation.</p>
+      <h2 id="resources-title">{zh ? '探索项目' : 'Explore the project'}</h2>
+      <p>{zh ? '获取源代码、安装说明与技术资料。' : 'Find the source code, setup instructions, and technical documentation.'}</p>
     </div>
 
     <div class="resource-list">
       <a class="resource-row" href={site.repoUrl} target="_blank" rel="noopener noreferrer" aria-label="Open the GitHub repository in a new tab">
-        <span><strong>GitHub</strong><small>Source code, setup, and usage instructions.</small></span>
-        <b>View repository <span aria-hidden="true">↗</span></b>
+        <span><strong>GitHub</strong><small>{zh ? '源代码、安装和使用说明。' : 'Source code, setup, and usage instructions.'}</small></span>
+        <b>{zh ? '查看仓库' : 'View repository'} <span aria-hidden="true">↗</span></b>
       </a>
       <a class="resource-row" href={site.reportUrl} download>
-        <span><strong>Technical report</strong><small>Architecture, training objectives, and reported evaluation.</small></span>
-        <b>Download report PDF <span aria-hidden="true">↓</span></b>
+        <span><strong>{zh ? '技术报告' : 'Technical report'}</strong><small>{zh ? '模型架构、训练目标与实验评估。' : 'Architecture, training objectives, and reported evaluation.'}</small></span>
+        <b>{zh ? '下载报告 PDF' : 'Download report PDF'} <span aria-hidden="true">↓</span></b>
       </a>
       <a class="resource-row" href={site.flowchartPdfUrl} download>
-        <span><strong>Architecture diagram</strong><small>The supplied pipeline schematic in PDF format.</small></span>
-        <b>Download architecture PDF <span aria-hidden="true">↓</span></b>
+        <span><strong>{zh ? '模型架构图' : 'Architecture diagram'}</strong><small>{zh ? 'PDF 格式的完整处理流程图。' : 'The supplied pipeline schematic in PDF format.'}</small></span>
+        <b>{zh ? '下载架构 PDF' : 'Download architecture PDF'} <span aria-hidden="true">↓</span></b>
       </a>
       <div class="resource-row resource-row-static">
-        <span><strong>Hugging Face</strong><small>Model distribution and interactive demos are planned.</small></span>
-        <b>Planned</b>
+        <span><strong>Hugging Face</strong><small>{zh ? '模型发布与交互演示正在规划中。' : 'Model distribution and interactive demos are planned.'}</small></span>
+        <b>{zh ? '规划中' : 'Planned'}</b>
       </div>
     </div>
   </div>

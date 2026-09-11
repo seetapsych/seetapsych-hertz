@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
+import Highlights from '../components/Highlights.astro';
 import Demo from '../components/Demo.astro';
 import Method from '../components/Method.astro';
 import Results from '../components/Results.astro';
@@ -13,13 +14,14 @@ import Footer from '../components/Footer.astro';
   title="SeetaPsych Hertz | TinyHR Video-Based Heart-Rate Estimation"
   description="Explore TinyHR, a lightweight model for estimating pulse waveforms and heart rate from facial video. Watch the demo, inspect the method, and access the code."
 >
-  <Header />
+  <Header lang="en" />
   <main id="main">
-    <Hero />
-    <Demo />
-    <Method />
-    <Results />
-    <Resources />
+    <Hero lang="en" />
+    <Highlights lang="en" />
+    <Demo lang="en" />
+    <Method lang="en" />
+    <Results lang="en" />
+    <Resources lang="en" />
   </main>
-  <Footer />
+  <Footer lang="en" />
 </BaseLayout>

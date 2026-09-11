@@ -1,58 +1,128 @@
 <div align="center">
 
-# SeetaPsych Hertz / TinyHR
+# SeetaPsych Hertz
 
-## See the pulse. Through video.
+<img src="website/public/media/tinyhr-logo.png" width="150" alt="SeetaPsych Hertz logo">
 
-A lightweight model that recovers pulse waveforms and estimates heart rate from
-facial video.
+### See the pulse. Through video.
 
-[**Watch demo**](website/public/media/demo-full.mp4) ·
-[**Technical report**](website/public/downloads/tinyhr-technical-report.pdf) ·
-[**Architecture PDF**](website/public/downloads/tinyhr-flowchart.pdf)
+Contactless heart-rate estimation from ordinary facial video, powered by a compact rPPG model.
 
-[![TinyHR recorded demo showing facial video, a predicted pulse waveform, and heart-rate estimates](website/public/media/tinyhr-demo.gif)](website/public/media/demo-full.mp4)
+[English](README.md) | [简体中文](README_CN.md)
 
-*Animated 12-second preview · click it to watch the full video*
+[Introduction](#introduction) · [Installation](#installation) · [Demo](#demo) · [Datasets](#training-data) · [Benchmark](#model-size-and-latency) · [Technical Report](website/public/downloads/tinyhr-technical-report.pdf)
+
+[![TinyHR demo showing facial video, predicted pulse waveform, and heart-rate estimates](website/public/media/tinyhr-demo.gif)](website/public/media/demo-full.mp4)
+
+*Watch TinyHR turn facial video into a live pulse waveform. Click for the full demo.*
+
+[![Python](https://img.shields.io/badge/Python-3.10%2B-2563D8?logo=python&logoColor=white)](pyproject.toml)
+[![ONNX Runtime](https://img.shields.io/badge/ONNX_Runtime-CPU%20%7C%20GPU-091D31?logo=onnx&logoColor=white)](seetapsych_hertz/modules/tiny-hr.yml)
+[![TinyHR](https://img.shields.io/badge/TinyHR-82%2C177_params-FB5F14)](seetapsych_hertz/modules/tiny-hr.yml)
+[![License](https://img.shields.io/badge/License-BSD--3--Clause-75E5C9)](LICENSE)
 
 </div>
 
-## See it in action
+## Introduction
 
-### From facial video to a pulse waveform
+SeetaPsych Hertz provides heart-rate estimation modules for the
+[SeetaPsych](https://github.com/seetapsych/seetapsych-lib) ecosystem. Its TinyHR model
+recovers an rPPG waveform from subtle color changes in facial video, then converts the
+waveform into heart rate through filtering and spectral analysis.
 
-The recorded TinyHR pipeline presents facial video, a predicted rPPG waveform,
-and heart-rate estimates together. The recording illustrates the pipeline;
-accuracy is reported separately in the evaluation below.
+TinyHR is designed for practical deployment: the published ONNX model has only
+**82,177 parameters** and occupies **381 KiB**, while its four-dataset training corpus
+covers **1,288 subjects** and **6,307 videos**. Once the initial video window is ready,
+the default streaming pipeline produces a new estimate every second.
 
-## From video to pulse
+## Major Features
 
-### How TinyHR works
+| | Feature | Why it matters |
+|---|---|---|
+| 🌍 | **Diverse multi-source training data** | Four rPPG datasets span 1,288 subjects and 6,307 training videos, increasing diversity across people and recording conditions. |
+| 🪶 | **82K-parameter TinyHR model** | The 381 KiB ONNX model is small enough for resource-conscious and edge-oriented deployments. |
+| ⚡ | **Fast compute and rolling response** | The measured TinyHR pipeline takes about 132 ms on an Apple M4 CPU and refreshes the estimate every 1 second after warm-up. |
+| 📹 | **Contactless measurement** | A regular RGB camera provides the facial video input; no wearable sensor is required for the estimation pipeline. |
+| 📈 | **Waveform-first inference** | TinyHR predicts an rPPG waveform before deterministic heart-rate estimation, keeping the physiological signal available for inspection. |
+| 🧩 | **SeetaPsych integration** | Ready-made modules support video files and live video streams through the SeetaPsych pipeline. |
 
-Remote photoplethysmography (rPPG) estimates pulse-related signals from subtle
-changes in light reflected by facial skin. TinyHR processes a clip of 160 RGB
-facial frames at 128 × 128 pixels. Its lightweight convolutional pipeline
-emphasizes differences between neighboring frames, builds compact spatial
-features, and combines temporal information at multiple scales. The network
-predicts one rPPG waveform sample per video frame. Heart rate is then calculated
-from the predicted waveform using filtering and spectral analysis.
+## Key Numbers
+
+| Training datasets | Training subjects | Training videos | Parameters | Model size | Test MAE |
+|---:|---:|---:|---:|---:|---:|
+| **4** | **1,288** | **6,307** | **82,177** | **381 KiB** | **3.88 BPM** |
+
+## Demo
+
+The demonstration presents the detected face, predicted BVP waveform, and heart-rate
+estimate together. It illustrates the processing pipeline; accuracy is reported
+separately in the evaluation section.
+
+## Training Data
+
+TinyHR was trained with four complementary rPPG datasets. The table below reproduces
+the dataset table in the supplied technical report.
+
+| Dataset | Subjects | Videos | Usage |
+|---|---:|---:|---|
+| VIPL-HR V1 | 85 | 1,883 | Training |
+| VIPL-HR V2 | 500 | 2,498 | Training |
+| V4V | 103 | 726 | Training |
+| MCD-rPPG | 600 | 1,200 | Training; front-facing videos only |
+| **Total** | **1,288** | **6,307** | **Four-source training corpus** |
+
+The independent VIPL-HR V1 test split contains **22 subjects and 485 videos**. The
+report states that this split was used only for evaluation and was excluded from
+training.
+
+| Training configuration | Setting |
+|---|---|
+| Batch size | 4 |
+| Initial learning rate | 0.005 |
+| Learning-rate scheduler | OneCycleLR |
+| Input clip | 160 RGB frames at 128 × 128 |
+
+Source: [TinyHR technical report, pages 6-7](website/public/downloads/tinyhr-technical-report.pdf).
+
+## Model Size and Latency
+
+| Measurement | Result | Interpretation |
+|---|---:|---|
+| ONNX parameters | **82,177** | Counted from the initializers in the published model |
+| ONNX file size | **381 KiB** | SHA-256 verified against the model URL in `tiny-hr.yml` |
+| TinyHR processing latency | **132 ms mean** | Input normalization + ONNX inference + waveform normalization + heart-rate signal processing |
+| Median / P95 latency | **125 / 164 ms** | 50 warmed runs using ONNX Runtime CPUExecutionProvider |
+| Initial observation window | **≈ 5.3 s at 30 FPS** | 160 frames must be collected before the first model estimate |
+| Rolling update interval | **1.0 s default** | A new estimate is requested every 30 frames at 30 FPS |
+
+Benchmark environment: Apple M4 MacBook Air, 10-core CPU, 24 GB memory, ONNX Runtime
+1.30.0, CPUExecutionProvider, 11 September 2026. The compute benchmark excludes camera
+capture and face detection, whose cost depends on the deployed detector and hardware.
+
+The separation between observation time and compute time is important in real use. A
+short facial-video window supplies enough temporal information for pulse estimation;
+after that warm-up, sub-second TinyHR processing fits comfortably inside the default
+one-second rolling update cadence. This makes the model useful for live wellness
+interfaces, human-computer interaction, affective-computing research, and lightweight
+remote monitoring prototypes.
+
+## How TinyHR Works
 
 [![TinyHR architecture and inference flow](website/public/media/tinyhr-flowchart.png)](website/public/downloads/tinyhr-flowchart.pdf)
 
-*Click the diagram to open the architecture PDF.*
+*Click the diagram to open the full architecture PDF.*
 
 | Stage | Module | Function |
 |---:|---|---|
-| 01 | Frame Difference Fusion Stem | Converts four neighboring-frame difference maps into compact spatial features. |
-| 02 | Spatial Patch Embedding | Reduces each feature map from 32 × 32 to 8 × 8 while preserving time. |
-| 03 | Multi-scale Temporal Feature Block | Combines temporal information at different offsets with residual feature fusion. |
+| 01 | Frame Difference Fusion Stem | Converts neighboring-frame differences into compact spatial features that emphasize subtle temporal color changes. |
+| 02 | Spatial Patch Embedding | Reduces each feature map from 32 × 32 to 8 × 8 while preserving the temporal sequence. |
+| 03 | Multi-scale Temporal Feature Block | Combines temporal information at several offsets with residual feature fusion. |
 | 04 | Waveform Predictor | Produces one rPPG waveform value for every input frame. |
+| 05 | Signal Processing | Applies detrending, band-pass filtering, and Welch spectral analysis to obtain BPM. |
 
-### From waveform to heart rate
-
-During inference, a second-order Butterworth band-pass filter retains frequencies
-from 0.75 to 2.5 Hz. Welch's method estimates the power spectral density of the
-filtered waveform, and the dominant frequency is converted to beats per minute.
+During inference, the physiological band is restricted to 0.75-2.5 Hz, corresponding
+to 45-150 BPM. The dominant frequency of the filtered waveform is converted to heart
+rate:
 
 ```text
 Heart rate (BPM) = 60 × dominant frequency (Hz)
@@ -67,47 +137,34 @@ L = 0.2 L_time + L_CE + L_KL
 
 ## Evaluation
 
-### Reported performance
+| Dataset | Test split | Protocol | MAE |
+|---|---|---|---:|
+| VIPL-HR V1 | 22 subjects · 485 videos | Held out from training | **3.88 BPM** |
 
-| Mean absolute error | Dataset | Test split | Input |
-|---:|---|---|---|
-| **3.88 BPM** | VIPL-HR V1 | 22 subjects · 485 videos | 160 frames · 128 × 128 |
+This is the author-reported result from the supplied technical report. It describes the
+specified test set rather than a guaranteed error bound for every video.
 
-This is author-reported performance on the held-out test set described in the
-[TinyHR technical report](website/public/downloads/tinyhr-technical-report.pdf).
-It is not a per-video error bound.
+## Installation
 
-## Explore the project
+This project is included in the default SeetaPsych configuration. Download its modules
+with:
 
-| Resource | Description |
-|---|---|
-| [Source code](#usage) | Setup and usage instructions |
-| [Full demo](website/public/media/demo-full.mp4) | Recorded TinyHR pipeline |
-| [Technical report](website/public/downloads/tinyhr-technical-report.pdf) | Architecture, training objectives, and evaluation |
-| [Architecture diagram](website/public/downloads/tinyhr-flowchart.pdf) | Full pipeline schematic in PDF format |
-| Hugging Face | Model distribution and interactive demos are planned |
+```bash
+seetapsych-manager download
+```
+
+For the complete framework workflow, see
+[SeetaPsych](https://github.com/seetapsych/seetapsych-lib).
 
 ## Usage
 
-This project is already included in the seetapsych-lib default configuration. Download and use it via `seetapsych-manager download`.
-
-For usage, refer to [SeetaPsych](https://github.com/seetapsych/seetapsych-lib).
-
-You can additionally add this algorithm module using the following methods.
-
-Heart rate estimation requires processing video or real-time video streams to extract heart rate information.
-
 ### WebUI
 
-Run `seetapsych-webui` with the `--files` argument to use it.
-
-```
+```bash
 seetapsych-webui --files seetapsych_hertz/modules/seeta.yml
 ```
 
 ### Programmatic Usage
-
-Add the following code in your program to use this algorithm module.
 
 ```python
 from seetapsych_lib.runtime.factory import Factory
@@ -117,86 +174,43 @@ factory = Factory()
 factory.load_file_modules("seetapsych_hertz/modules/seeta.yml")
 
 pipeline = Pipeline(factory, ...)
-
 pipeline.add_attributes("face/heart_rate")
 ```
 
-### Module Catalog
+## Module Zoo
 
-| Module YAML Path | Package Name |
-|---|---|
-| `seetapsych_hertz/modules/ada-chrom.yml` | HeartRate-AdaChrom |
-| `seetapsych_hertz/modules/seeta.yml` | HeartRate-Seeta |
-| `seetapsych_hertz/modules/tiny-hr.yml` | HeartRate-TinyHR |
-
-### AdaChrom
-
-> Model-free rPPG heart rate estimation using adaptive chrominance analysis on skin ROI.
-
-Module config: [ada-chrom.yml](seetapsych_hertz/modules/ada-chrom.yml)
-
-| Package | Provides | Requires |
+| Module | Description | Input modes |
 |---|---|---|
-| HeartRate-AdaChrom | `face/heart_rate` | `face/dense_landmarks` |
+| [AdaChrom](seetapsych_hertz/modules/ada-chrom.yml) | Model-free adaptive chrominance rPPG on skin ROIs | Video stream · video file |
+| [Seeta](seetapsych_hertz/modules/seeta.yml) | Seeta heart-rate estimation module | Video stream · video file |
+| [TinyHR](seetapsych_hertz/modules/tiny-hr.yml) | Lightweight waveform model with Welch spectral analysis | Video stream · video file |
 
-**Description**
+### TinyHR Parameters
 
-Adaptive chrominance rPPG heart rate estimator. Accepts multiple ROI selectors; the default forehead-only adaptive skin mask (`skin_b_adaptive_forehead`) matches the original delivery configuration, while the preset group `all` runs every available region.
+| Name | Type | Default | Description |
+|---|---|---:|---|
+| `fps` | number | `30` | Expected video frame rate used for buffering and spectral analysis |
+| `interval` | number | `1` | Seconds between consecutive rolling heart-rate estimates |
 
-**Usage Notes**
+### AdaChrom Parameters
 
-- Supports both video streams and video files.
-- For video stream mode, best results are achieved at 30 FPS or higher, which requires optimized processing logic and better hardware (with GPU).
-- For stable analysis results, it is recommended to use video files with a stable frame rate of 30 FPS or higher.
-
-**Parameters**
-
-| Name | Type | Default | Description & Tuning |
+| Name | Type | Default | Description |
 |---|---|---|---|
-| `window_samples` | integer | `300` | Sliding window frame count for HR estimation. Larger values reduce noise but increase latency; adjust based on real-time demand. |
-| `roi_regions` | `selection[]` | `["skin_b_adaptive_forehead"]` | ROI selectors to estimate heart rate on. Multiple selectors are evaluated independently, with valid results merged into the fused `hr_bpm` and the per-region `roi_hr_bpm` map. |
+| `window_samples` | integer | `300` | Sliding-window frame count; larger values reduce noise but increase response time |
+| `roi_regions` | `selection[]` | `["skin_b_adaptive_forehead"]` | Skin regions evaluated before valid estimates are fused |
 
-**Models**
+Both modules provide the
+[`face/heart_rate`](https://github.com/seetapsych/seetapsych-attributes#faceheart_rate)
+attribute.
 
-*(None)*
+## Resources
 
-**Output Attributes**
-- `face/heart_rate` — [spec](https://github.com/seetapsych/seetapsych-attributes#faceheart_rate).
+- [Full recorded demo](website/public/media/demo-full.mp4)
+- [TinyHR technical report](website/public/downloads/tinyhr-technical-report.pdf)
+- [Architecture diagram](website/public/downloads/tinyhr-flowchart.pdf)
+- [Interactive project page source](website/)
+- Hugging Face model distribution and interactive demos are planned.
 
-The per-region results requested via `roi_regions` are returned inside `roi_hr_bpm`: each key corresponds to one selected ROI and the value is that region's heart rate in BPM for the current window.
+## License
 
-### TinyHR
-
-> Lightweight neural network for fast heart rate estimation directly from face video frames.
-
-Module config: [tiny-hr.yml](seetapsych_hertz/modules/tiny-hr.yml)
-
-| Package | Provides | Requires |
-|---|---|---|
-| HeartRate-TinyHR | `face/heart_rate` | `face/detection` |
-
-**Description**
-
-Fast RhythmFormer heart rate estimator using buffered face crops + Welch spectral analysis.
-
-**Usage Notes**
-
-- Supports both video streams and video files.
-- For video stream processing, frame rates close to 30 or 25 FPS yield the best results.
-- For stable analysis results, it is recommended to use video files with a frame rate of 30 FPS or 25 FPS.
-
-**Parameters**
-
-| Name | Type | Default | Description & Tuning |
-|---|---|---|---|
-| `fps` | number | `30` | Expected camera/video FPS used for spectral analysis windowing. Mismatch with actual source FPS degrades HR accuracy. |
-| `interval` | number | `1` | Seconds between consecutive HR estimates. Smaller intervals yield more updates with higher jitter; larger intervals are smoother but slower. |
-
-**Models**
-
-| Model | Recommended |
-|---|---|
-| `seeta-hertz-tinyhr.onnx` | ✓ |
-
-**Output Attributes**
-- `face/heart_rate` — [spec](https://github.com/seetapsych/seetapsych-attributes#faceheart_rate).
+This project is released under the [BSD 3-Clause License](LICENSE).

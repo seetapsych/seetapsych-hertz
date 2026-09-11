@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Hero from '../../components/Hero.astro';
+import Highlights from '../../components/Highlights.astro';
+import Demo from '../../components/Demo.astro';
+import MethodZh from '../../components/MethodZh.astro';
+import Results from '../../components/Results.astro';
+import Resources from '../../components/Resources.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<BaseLayout
+  lang="zh"
+  title="SeetaPsych Hertz | TinyHR 人脸视频心率估计"
+  description="TinyHR 是一个从人脸视频中恢复脉搏波形并估计心率的轻量级模型。查看演示、核心原理、训练数据和实验结果。"
+>
+  <Header lang="zh" />
+  <main id="main">
+    <Hero lang="zh" />
+    <Highlights lang="zh" />
+    <Demo lang="zh" />
+    <MethodZh />
+    <Results lang="zh" />
+    <Resources lang="zh" />
+  </main>
+  <Footer lang="zh" />
+</BaseLayout>

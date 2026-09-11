@@ -1,42 +1,46 @@
 ---
 import { site } from '../data/site';
+
+interface Props { lang?: 'en' | 'zh'; }
+const { lang = 'en' } = Astro.props;
+const zh = lang === 'zh';
 ---
 
 <section class="section results-section" id="results" aria-labelledby="results-title">
   <div class="container">
     <div class="section-heading">
-      <p class="eyebrow eyebrow-dark">EVALUATION</p>
-      <h2 id="results-title">Reported performance</h2>
+      <p class="eyebrow eyebrow-dark">{zh ? '实验评估' : 'EVALUATION'}</p>
+      <h2 id="results-title">{zh ? '报告结果' : 'Reported performance'}</h2>
     </div>
 
     <div class="results-grid">
       <div class="result-number" aria-label={`Mean absolute error ${site.maeBpm} BPM`}>
         <span>{site.maeBpm}</span>
         <strong>BPM</strong>
-        <p>Mean absolute error (MAE)</p>
+        <p>{zh ? '平均绝对误差（MAE）' : 'Mean absolute error (MAE)'}</p>
       </div>
 
       <div>
         <dl class="result-list">
           <div>
-            <dt>Dataset</dt>
+            <dt>{zh ? '数据集' : 'Dataset'}</dt>
             <dd>{site.dataset}</dd>
           </div>
           <div>
-            <dt>Test split</dt>
-            <dd>{site.subjects} subjects · {site.videos} videos</dd>
+            <dt>{zh ? '测试集' : 'Test split'}</dt>
+            <dd>{site.subjects} {zh ? '名受试者' : 'subjects'} · {site.videos} {zh ? '段视频' : 'videos'}</dd>
           </div>
           <div>
-            <dt>Evaluation protocol</dt>
-            <dd>Held-out test set, excluded from training according to the report</dd>
+            <dt>{zh ? '评估方案' : 'Evaluation protocol'}</dt>
+            <dd>{zh ? '根据技术报告，测试集与训练集完全隔离' : 'Held-out test set, excluded from training according to the report'}</dd>
           </div>
           <div>
-            <dt>Source</dt>
-            <dd>TinyHR technical report, page {site.reportPage}</dd>
+            <dt>{zh ? '来源' : 'Source'}</dt>
+            <dd>{zh ? `TinyHR 技术报告第 ${site.reportPage} 页` : `TinyHR technical report, page ${site.reportPage}`}</dd>
           </div>
         </dl>
-        <p class="result-disclaimer">Author-reported performance on the specified test set. This value is not a per-video error bound.</p>
-        <a class="text-link text-link-dark" href={`${site.reportUrl}#page=${site.reportPage}`} target="_blank" rel="noopener noreferrer" aria-label="Open the evaluation details in the technical report in a new tab">Read the evaluation details <span aria-hidden="true">↗</span></a>
+        <p class="result-disclaimer">{zh ? '技术报告中指定测试集上的作者报告结果，并非每段视频的误差上限。' : 'Author-reported performance on the specified test set. This value is not a per-video error bound.'}</p>
+        <a class="text-link text-link-dark" href={`${site.reportUrl}#page=${site.reportPage}`} target="_blank" rel="noopener noreferrer">{zh ? '查看评估详情' : 'Read the evaluation details'} <span aria-hidden="true">↗</span></a>
       </div>
     </div>
   </div>
