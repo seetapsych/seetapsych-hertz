@@ -214,3 +214,15 @@ attribute.
 ## License
 
 This project is released under the [BSD 3-Clause License](LICENSE).
+
+## Affiliations
+
+<p align="center">
+  <a href="https://www.seu.edu.cn/" title="Southeast University">
+    <img src="website/public/media/affiliations/southeast-university.png" alt="Southeast University" height="104" />
+  </a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://www.ict.ac.cn/" title="Institute of Computing Technology, Chinese Academy of Sciences">
+    <img src="website/public/media/affiliations/ict-cas.png" alt="Institute of Computing Technology, Chinese Academy of Sciences" height="72" />
+  </a>
+</p>
