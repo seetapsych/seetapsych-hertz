@@ -2,7 +2,7 @@
 
 # SeetaPsych Hertz
 
-<img src="website/public/media/tinyhr-logo.png" width="150" alt="SeetaPsych Hertz 标志">
+<img src="website/public/media/tinyhr-logo.png" width="460" alt="SeetaPsych Hertz 标志">
 
 ### 看见脉搏，始于视频
 

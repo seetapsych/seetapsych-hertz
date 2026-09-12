@@ -2,7 +2,7 @@
 
 # SeetaPsych Hertz
 
-<img src="website/public/media/tinyhr-logo.png" width="150" alt="SeetaPsych Hertz logo">
+<img src="website/public/media/tinyhr-logo.png" width="460" alt="SeetaPsych Hertz logo">
 
 ### See the pulse. Through video.
 
