@@ -4,9 +4,10 @@
 
 <img src="website/public/media/tinyhr-logo.png" width="460" alt="SeetaPsych Hertz logo">
 
-### See the pulse. Through video.
+### Recover the pulse from subtle skin-color changes
 
-Contactless heart-rate estimation from ordinary facial video, powered by a compact rPPG model.
+TinyHR extracts pulse-induced color variations between adjacent frames of ordinary facial
+video, reconstructs an rPPG waveform, and estimates heart rate by spectral analysis.
 
 [English](README.md) | [简体中文](README_CN.md)
 
@@ -27,8 +28,9 @@ Contactless heart-rate estimation from ordinary facial video, powered by a compa
 
 SeetaPsych Hertz provides heart-rate estimation modules for the
 [SeetaPsych](https://github.com/seetapsych/seetapsych-lib) ecosystem. Its TinyHR model
-recovers an rPPG waveform from subtle color changes in facial video, then converts the
-waveform into heart rate through filtering and spectral analysis.
+emphasizes pulse-related color differences between neighboring facial frames, predicts a
+frame-aligned rPPG waveform, and derives heart rate through deterministic band-pass
+filtering and Welch spectral analysis.
 
 TinyHR is designed for practical deployment: the published ONNX model has only
 **82,177 parameters** and occupies **381 KiB**, while its four-dataset training corpus
@@ -41,7 +43,7 @@ the default streaming pipeline produces a new estimate every second.
 |---|---|---|
 | 🌍 | **Diverse multi-source training data** | Four rPPG datasets span 1,288 subjects and 6,307 training videos, increasing diversity across people and recording conditions. |
 | 🪶 | **82K-parameter TinyHR model** | The 381 KiB ONNX model is small enough for resource-conscious and edge-oriented deployments. |
-| ⚡ | **Fast compute and rolling response** | The measured TinyHR pipeline takes about 132 ms on an Apple M4 CPU and refreshes the estimate every 1 second after warm-up. |
+| ⚡ | **Low-latency inference** | Across 50 post-warm-up CPU runs, mean processing latency is 132 ms; estimates update at 1.0 s intervals after the initial observation window. |
 | 📹 | **Contactless measurement** | A regular RGB camera provides the facial video input; no wearable sensor is required for the estimation pipeline. |
 | 📈 | **Waveform-first inference** | TinyHR predicts an rPPG waveform before deterministic heart-rate estimation, keeping the physiological signal available for inspection. |
 | 🧩 | **SeetaPsych integration** | Ready-made modules support video files and live video streams through the SeetaPsych pipeline. |
@@ -90,21 +92,20 @@ Source: [TinyHR technical report, pages 6-7](website/public/downloads/tinyhr-tec
 |---|---:|---|
 | ONNX parameters | **82,177** | Counted from the initializers in the published model |
 | ONNX file size | **381 KiB** | SHA-256 verified against the model URL in `tiny-hr.yml` |
-| TinyHR processing latency | **132 ms mean** | Input normalization + ONNX inference + waveform normalization + heart-rate signal processing |
-| Median / P95 latency | **125 / 164 ms** | 50 warmed runs using ONNX Runtime CPUExecutionProvider |
+| TinyHR processing latency | **132 ms (mean)** | Input normalization, ONNX inference, waveform normalization, and heart-rate signal processing |
+| Latency distribution | **125 ms (median); 164 ms (P95)** | 50 post-warm-up runs using ONNX Runtime CPUExecutionProvider |
 | Initial observation window | **≈ 5.3 s at 30 FPS** | 160 frames must be collected before the first model estimate |
 | Rolling update interval | **1.0 s default** | A new estimate is requested every 30 frames at 30 FPS |
 
-Benchmark environment: Apple M4 MacBook Air, 10-core CPU, 24 GB memory, ONNX Runtime
-1.30.0, CPUExecutionProvider, 11 September 2026. The compute benchmark excludes camera
-capture and face detection, whose cost depends on the deployed detector and hardware.
+**Latency protocol.** Fifty post-warm-up runs with ONNX Runtime 1.30.0
+CPUExecutionProvider. Reported computation time excludes video acquisition and face
+detection.
 
-The separation between observation time and compute time is important in real use. A
-short facial-video window supplies enough temporal information for pulse estimation;
-after that warm-up, sub-second TinyHR processing fits comfortably inside the default
-one-second rolling update cadence. This makes the model useful for live wellness
+The 5.3 s initial interval represents physiological signal acquisition over 160 frames,
+whereas 132 ms quantifies subsequent model and signal-processing latency. Because this
+latency remains below the 1.0 s update interval, TinyHR supports near-real-time wellness
 interfaces, human-computer interaction, affective-computing research, and lightweight
-remote monitoring prototypes.
+remote-monitoring prototypes.
 
 ## How TinyHR Works
 
