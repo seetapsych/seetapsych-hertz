@@ -206,11 +206,7 @@ pipeline.add_attributes("face/heart_rate")
 ## 项目机构
 
 <p align="center">
-  <a href="https://www.seu.edu.cn/" title="东南大学">
-    <img src="website/public/media/affiliations/southeast-university.png" alt="东南大学" height="104" />
-  </a>
+  <a href="https://mysee1989.github.io/" title="东南大学"><img src="website/public/media/affiliations/southeast-university.png" alt="东南大学" height="104" /></a>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="https://www.ict.ac.cn/" title="中国科学院计算技术研究院">
-    <img src="website/public/media/affiliations/ict-cas.png" alt="中国科学院计算技术研究院" height="72" />
-  </a>
+  <a href="https://vipl.ict.ac.cn/" title="中国科学院计算技术研究院"><img src="website/public/media/affiliations/ict-cas.png" alt="中国科学院计算技术研究院" height="72" /></a>
 </p>
