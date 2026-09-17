@@ -371,15 +371,6 @@ h3 {
   background: #000;
 }
 
-.stage-caption {
-  max-width: 760px;
-  margin: 0;
-  padding: 0.85rem 1rem 1rem;
-  color: var(--muted-on-dark);
-  font-size: 0.82rem;
-  line-height: 1.55;
-}
-
 .section {
   position: relative;
   padding-block: var(--template-section-space);
@@ -556,37 +547,12 @@ h3 {
   font-size: 0.82rem;
 }
 
-.demo-disclaimer {
-  max-width: 640px;
-  margin: 0.85rem 0 0;
-  color: var(--muted);
-  font-size: 0.82rem;
-}
-
 .method-section {
   background: var(--paper-raised);
 }
 
 .method-heading {
   margin-bottom: 2.35rem;
-}
-
-.source-note {
-  margin-top: 1rem;
-  margin-bottom: 0;
-  color: var(--muted);
-  font-size: 0.78rem;
-  line-height: 1.55;
-}
-
-.source-note a {
-  text-decoration: underline;
-  text-decoration-color: rgb(37 99 216 / 32%);
-  text-underline-offset: 0.16em;
-}
-
-.source-note a:hover {
-  color: var(--blue-deep);
 }
 
 .architecture-figure {
@@ -619,14 +585,6 @@ h3 {
   gap: 0.85rem 1.25rem;
   align-items: center;
   margin-top: 1rem;
-}
-
-.architecture-figure figcaption {
-  max-width: 780px;
-  margin-top: 0.8rem;
-  color: var(--muted);
-  font-size: 0.82rem;
-  line-height: 1.55;
 }
 
 .architecture-details,
@@ -686,11 +644,6 @@ h3 {
   border-radius: 0.4rem;
 }
 
-.module-intro {
-  margin-top: 3.5rem;
-  border-top: 1px solid var(--line);
-}
-
 .module-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -715,7 +668,8 @@ h3 {
   letter-spacing: 0.08em;
 }
 
-.module-grid h3 {
+.module-grid h3,
+.module-grid h4 {
   font-size: 1.32rem;
 }
 
@@ -737,7 +691,8 @@ h3 {
   border-radius: var(--template-radius);
 }
 
-.inference-panel h3 {
+.inference-panel h3,
+.inference-panel h4 {
   margin-bottom: 0;
   color: var(--white);
 }
@@ -766,14 +721,6 @@ h3 {
   font-family: var(--font-mono);
   font-size: 0.86rem;
   line-height: 1.5;
-}
-
-.inference-panel .source-note {
-  color: var(--muted-on-dark);
-}
-
-.inference-panel .source-note a:hover {
-  color: var(--mint);
 }
 
 .training-details {
@@ -851,13 +798,6 @@ h3 {
   font-weight: 650;
 }
 
-.result-disclaimer {
-  max-width: 650px;
-  margin: 0 0 1rem;
-  color: var(--muted);
-  font-size: 0.83rem;
-}
-
 .resources-section {
   background: var(--paper-raised);
 }
@@ -933,6 +873,40 @@ a.resource-row:hover {
 .footer-inner .template-credit {
   max-width: 620px;
   font-size: 0.72rem;
+}
+
+.footer-affiliations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.1rem;
+  align-items: center;
+  width: fit-content;
+  margin-top: 1.35rem;
+  padding: 0.65rem 0.9rem;
+  border-radius: 0.65rem;
+  background: rgb(255 255 255 / 96%);
+}
+
+.footer-affiliations a {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 0.3rem;
+}
+
+.footer-affiliations a:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 3px;
+}
+
+.footer-affiliations img {
+  display: block;
+  max-height: 3.15rem;
+  width: auto;
+  object-fit: contain;
+}
+
+.footer-affiliations a:first-child img {
+  max-height: 3.85rem;
 }
 
 .template-credit a {
@@ -1061,8 +1035,7 @@ a.resource-row:hover {
     border-radius: 0.85rem;
   }
 
-  .stage-label,
-  .stage-caption {
+  .stage-label {
     padding-inline: 0.8rem;
   }
 
@@ -1070,6 +1043,14 @@ a.resource-row:hover {
   .footer-inner {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .footer-affiliations {
+    max-width: 100%;
+  }
+
+  .footer-affiliations img {
+    max-width: min(55vw, 18rem);
   }
 
   .architecture-image-link {
@@ -1128,4 +1109,246 @@ a.resource-row:hover {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
   }
+}
+
+/* Extensible HERTZ estimator collection. */
+.method-heading {
+  max-width: 920px;
+}
+
+.method-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+  margin: 2rem 0 0;
+}
+
+.method-links a {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.05rem 0.8rem;
+  align-items: center;
+  padding: 1rem 1.1rem;
+  color: var(--ink);
+  background: rgb(255 255 255 / 75%);
+  border: 1px solid var(--line);
+  border-radius: 0.8rem;
+  box-shadow: 0 8px 24px rgb(15 23 42 / 5%);
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.method-links a:hover {
+  border-color: var(--blue);
+  box-shadow: 0 12px 30px rgb(37 99 216 / 10%);
+  transform: translateY(-2px);
+}
+
+.method-links span {
+  grid-row: 1 / span 2;
+  color: var(--blue);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.method-links strong {
+  font-size: 1rem;
+}
+
+.method-links small {
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.algorithm-stack {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.algorithm-card {
+  position: relative;
+  scroll-margin-top: 6rem;
+  padding: clamp(1.35rem, 4vw, 3rem);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: calc(var(--template-radius) * 1.15);
+  box-shadow: 0 18px 50px rgb(15 23 42 / 7%);
+}
+
+.algorithm-card::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  content: "";
+}
+
+.algorithm-card--tinyhr {
+  background: linear-gradient(145deg, #f4f8ff 0%, #edf4ff 55%, #f8fbff 100%);
+  border-color: #cadcf6;
+}
+
+.algorithm-card--tinyhr::before {
+  background: linear-gradient(180deg, var(--blue), #8bb7f5);
+}
+
+.algorithm-card--adachrom {
+  background: linear-gradient(145deg, #f2fbf8 0%, #eaf8f3 55%, #f8fcfb 100%);
+  border-color: #c8e5dc;
+}
+
+.algorithm-card--adachrom::before {
+  background: linear-gradient(180deg, #0f9f75, #72cfb2);
+}
+
+.algorithm-card-header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 1rem clamp(1rem, 3vw, 2rem);
+  align-items: start;
+  max-width: 980px;
+  margin-bottom: clamp(2rem, 5vw, 3.25rem);
+}
+
+.algorithm-index {
+  display: grid;
+  width: 3.1rem;
+  height: 3.1rem;
+  place-items: center;
+  color: var(--blue-deep);
+  background: rgb(255 255 255 / 80%);
+  border: 1px solid rgb(37 99 216 / 18%);
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 850;
+}
+
+.algorithm-card--adachrom .algorithm-index {
+  color: #087556;
+  border-color: rgb(15 159 117 / 24%);
+}
+
+.algorithm-kicker {
+  margin: 0 0 0.55rem;
+  color: var(--blue-deep);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.algorithm-card--adachrom .algorithm-kicker {
+  color: #087556;
+}
+
+.algorithm-card h3 {
+  margin: 0 0 0.9rem;
+  font-size: clamp(2rem, 4vw, 3.15rem);
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+.algorithm-card-header > div:last-child > p:not(.algorithm-kicker) {
+  max-width: 850px;
+  color: #34435a;
+}
+
+.algorithm-card .architecture-image-link {
+  background: rgb(255 255 255 / 92%);
+  border-color: rgb(15 23 42 / 12%);
+}
+
+.adachrom-pipeline {
+  margin: 0 0 clamp(1.25rem, 3vw, 2rem);
+}
+
+.adachrom-pipeline-frame {
+  aspect-ratio: 1170 / 396;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid rgb(15 23 42 / 12%);
+  border-radius: calc(var(--template-radius) * 0.75);
+  box-shadow: 0 12px 36px rgb(15 23 42 / 7%);
+}
+
+.adachrom-pipeline img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.adachrom-stage-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid rgb(15 159 117 / 24%);
+  border-radius: calc(var(--template-radius) * 0.75);
+  background: rgb(15 159 117 / 24%);
+  box-shadow: 0 12px 36px rgb(15 23 42 / 5%);
+}
+
+.adachrom-stage {
+  min-width: 0;
+  padding: 1.35rem;
+  background: rgb(255 255 255 / 76%);
+}
+
+.adachrom-stage > p {
+  margin: 0 0 0.5rem;
+  color: #087556;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.adachrom-stage h4 {
+  margin: 0 0 0.7rem;
+  color: var(--ink);
+  font-size: 1.05rem;
+  letter-spacing: -0.025em;
+}
+
+.adachrom-stage span {
+  display: block;
+  color: #405266;
+  font-size: 0.88rem;
+  line-height: 1.65;
+}
+
+.algorithm-card .module-grid li {
+  border-top-color: rgb(15 23 42 / 14%);
+}
+
+.module-grid h4,
+.inference-panel h4 {
+  margin-top: 0;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+}
+
+.inference-panel h4 {
+  font-size: 1.5rem;
+}
+
+@media (max-width: 767px) {
+  .method-links {
+    grid-template-columns: 1fr;
+  }
+
+  .adachrom-stage-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .algorithm-card-header {
+    grid-template-columns: 1fr;
+  }
+
+  .algorithm-index {
+    width: 2.7rem;
+    height: 2.7rem;
+  }
+
 }

@@ -27,10 +27,6 @@ import { site } from '../data/site';
     <a class="text-link text-link-dark" href={site.flowchartPdfUrl} download>Download architecture PDF <span aria-hidden="true">↓</span></a>
   </div>
 
-  <figcaption>
-    Architecture schematic supplied with the project. Some labels differ from the technical report; the description below follows the report.
-  </figcaption>
-
   <details class="architecture-details" data-pdf-details>
     <summary>View PDF inline</summary>
     <iframe
@@ -42,10 +38,6 @@ import { site } from '../data/site';
     ></iframe>
   </details>
 
-  <details class="architecture-details discrepancy-details">
-    <summary>Diagram and report differences</summary>
-    <p>The supplied diagram includes hierarchical/TPT labels, an RGB branch, overlapping patches, an MLP projection label, and first-order filtering. The technical report describes a single convolutional MTF stage, difference-only input processing, kernel-4/stride-4 spatial embedding, a pointwise convolutional waveform predictor, and second-order filtering. The diagram is preserved as supplied; the method text follows the report.</p>
-  </details>
 </figure>
 
 <script>

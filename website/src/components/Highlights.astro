@@ -1,6 +1,4 @@
 ---
-import { site } from '../data/site';
-
 interface Props {
   lang?: 'en' | 'zh';
 }
@@ -13,13 +11,13 @@ const metrics = zh
       ['4', '训练数据集'],
       ['6,307', '训练视频'],
       ['82,177', '模型参数 · ONNX 仅 381 KiB'],
-      ['≈132 ms', 'M4 CPU 实测处理延迟'],
+      ['80 / 6 ms', 'CPU / GPU 平均推理时间 · 各 100 次'],
     ]
   : [
       ['4', 'training datasets'],
       ['6,307', 'training videos'],
       ['82,177', 'model parameters · 381 KiB ONNX'],
-      ['≈132 ms', 'measured processing latency on M4 CPU'],
+      ['80 / 6 ms', 'mean CPU / GPU inference · 100 runs each'],
     ];
 
 const datasets = [
@@ -50,10 +48,10 @@ const datasets = [
     </div>
 
     <div class="latency-note">
-      <strong>{zh ? '首次结果约 5.3 秒，之后每秒刷新。' : 'First result in ≈5.3 seconds, then refreshed every second.'}</strong>
+      <strong>{zh ? 'TinyHR 推理：CPU 平均 80 ms，GPU 平均 6 ms。' : 'TinyHR inference: 80 ms mean on CPU, 6 ms mean on GPU.'}</strong>
       <p>{zh
-        ? '30 FPS 下先收集 160 帧；窗口准备好后，TinyHR 在 Apple M4 CPU 上实测平均处理时间约 132 ms。测试包含输入归一化、ONNX 推理与心率后处理，不含摄像头采集和人脸检测。'
-        : 'At 30 FPS, TinyHR first collects 160 frames. Once the window is ready, measured processing averages about 132 ms on an Apple M4 CPU, including input normalization, ONNX inference, and heart-rate post-processing but excluding capture and face detection.'}</p>
+        ? '参考测试在 Intel Core i9-13900KF（3.00 GHz）CPU 和服务器 NVIDIA H20 GPU 上各运行 100 次。数值仅表示模型推理时间，不包含视频采集、人脸检测、160 帧输入窗口收集和更新调度；结果会随运行环境变化。'
+        : 'The reference benchmark ran 100 times per device on an Intel Core i9-13900KF CPU at 3.00 GHz and an NVIDIA H20 GPU in a server environment. Values cover model inference only; video capture, face detection, 160-frame input collection, and update scheduling are excluded. Results vary by runtime environment.'}</p>
     </div>
 
     <div class="dataset-panel" id="datasets">
@@ -87,9 +85,6 @@ const datasets = [
           </tbody>
         </table>
       </div>
-      <p class="source-note">{zh
-        ? <>独立测试：VIPL-HR V1，22 名受试者、485 段视频；MAE 3.88 BPM。数据来自<a href={`${site.reportUrl}#page=6`} target="_blank" rel="noopener noreferrer">技术报告第 6-7 页 <span aria-hidden="true">↗</span></a>。</>
-        : <>Held-out evaluation: VIPL-HR V1, 22 subjects and 485 videos; MAE 3.88 BPM. Data from the <a href={`${site.reportUrl}#page=6`} target="_blank" rel="noopener noreferrer">technical report, pages 6-7 <span aria-hidden="true">↗</span></a>.</>}</p>
     </div>
   </div>
 </section>

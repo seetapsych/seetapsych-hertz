@@ -12,9 +12,9 @@ const zh = lang === 'zh';
 <section class="hero" id="top" aria-labelledby="hero-title">
   <div class="container hero-inner">
     <div class="hero-copy">
-      <p class="eyebrow">SEETAPSYCH HERTZ / TINYHR</p>
-      <h1 id="hero-title">{zh ? <>看见脉搏，<br />始于视频。</> : <>See the pulse.<br />Through video.</>}</h1>
-      <p class="hero-description">{zh ? '一个从普通人脸视频中恢复脉搏波形并估计心率的轻量级模型。' : 'A lightweight model that recovers pulse waveforms and estimates heart rate from facial video.'}</p>
+      <p class="eyebrow">HERTZ / OPEN-SOURCE RPPG</p>
+      <h1 id="hero-title">{zh ? '面向人脸视频的 rPPG 心率估计技术' : 'rPPG Heart-Rate Estimation from Facial Video'}</h1>
+      <p class="hero-description">{zh ? 'HERTZ 是一个可扩展的开源算法集合，组织互补的人脸视频 rPPG 心率估计方法：TinyHR 从视频学习脉搏波形，AdaChrom 通过无需训练的色度信号处理恢复脉搏信号。' : 'HERTZ is an extensible open-source collection of complementary facial-video rPPG estimators: TinyHR learns pulse waveforms from video, while AdaChrom recovers pulse signals through training-free chrominance-based processing.'}</p>
       <div class="hero-actions">
         <a class="button button-primary" href="#demo">{zh ? '观看演示' : 'Watch demo'}</a>
         <a class="button button-secondary" href={site.repoUrl} target="_blank" rel="noopener noreferrer" aria-label="Open the code on GitHub in a new tab">
@@ -25,7 +25,7 @@ const zh = lang === 'zh';
     </div>
 
     <div class="hero-stage">
-      <p class="stage-label">{zh ? '录制演示 · 12 秒预览' : 'RECORDED DEMO · 12-SECOND PREVIEW'}</p>
+      <p class="stage-label">{zh ? 'TINYHR 录制演示 · 12 秒预览' : 'TINYHR RECORDED DEMO · 12-SECOND PREVIEW'}</p>
       <video
         class="media-video hero-video"
         data-hero-video
@@ -42,7 +42,6 @@ const zh = lang === 'zh';
       >
         Your browser does not support video playback. <a href={site.heroPreviewUrl} download>Download the preview video.</a>
       </video>
-      <p class="stage-caption">{zh ? '在同一段录制画面中查看人脸视频、预测脉搏波形和心率估计。' : 'Facial video, a predicted pulse waveform, and heart-rate estimates in one recorded demonstration.'}</p>
     </div>
   </div>
 </section>

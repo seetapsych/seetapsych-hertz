@@ -39,7 +39,6 @@ const zh = lang === 'zh';
             <dd>{zh ? `TinyHR 技术报告第 ${site.reportPage} 页` : `TinyHR technical report, page ${site.reportPage}`}</dd>
           </div>
         </dl>
-        <p class="result-disclaimer">{zh ? '技术报告中指定测试集上的作者报告结果，并非每段视频的误差上限。' : 'Author-reported performance on the specified test set. This value is not a per-video error bound.'}</p>
         <a class="text-link text-link-dark" href={`${site.reportUrl}#page=${site.reportPage}`} target="_blank" rel="noopener noreferrer">{zh ? '查看评估详情' : 'Read the evaluation details'} <span aria-hidden="true">↗</span></a>
       </div>
     </div>

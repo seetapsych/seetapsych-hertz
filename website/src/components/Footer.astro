@@ -4,14 +4,28 @@ import { site } from '../data/site';
 interface Props { lang?: 'en' | 'zh'; }
 const { lang = 'en' } = Astro.props;
 const zh = lang === 'zh';
+const southeastUniversityUrl = zh
+  ? 'https://mysee1989.github.io/'
+  : 'https://scholar.google.com/citations?user=HRBTJYYAAAAJ';
+const ictCasUrl = zh
+  ? 'https://vipl.ict.ac.cn/'
+  : 'https://vipl.ict.ac.cn/en/index.html';
 ---
 
 <footer class="site-footer">
   <div class="container footer-inner">
-    <div>
+    <div class="footer-main">
       <strong>{site.brand}</strong>
-      <p>{site.model} · {zh ? '基于人脸视频的心率估计' : 'Heart-rate estimation from facial video'}</p>
+      <p>{zh ? '开源心率估计算法集合 · 基于人脸视频' : 'Open-source estimator collection · Heart-rate estimation from facial video'}</p>
       <p class="template-credit">Website design adapted from <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank" rel="noopener noreferrer" aria-label="Open Academic Project Page Template in a new tab">Academic Project Page Template</a> and <a href="https://nerfies.github.io/" target="_blank" rel="noopener noreferrer" aria-label="Open Nerfies in a new tab">Nerfies</a>. Adapted website design: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer" aria-label="Open the CC BY-SA 4.0 license in a new tab">CC BY-SA 4.0</a>.</p>
+      <div class="footer-affiliations" aria-label={zh ? '项目机构' : 'Project institutions'}>
+        <a href={southeastUniversityUrl} target="_blank" rel="noopener noreferrer" aria-label={zh ? '访问东南大学相关页面' : 'View the associated scholar profile on Google Scholar'}>
+          <img src={site.southeastUniversityLogoUrl} width="104" height="104" alt={zh ? '东南大学' : 'Southeast University'} loading="lazy" />
+        </a>
+        <a href={ictCasUrl} target="_blank" rel="noopener noreferrer" aria-label={zh ? '访问中国科学院计算技术研究所相关页面' : 'Visit the Vision and Perception Laboratory website'}>
+          <img src={site.ictCasLogoUrl} width="476" height="72" alt={zh ? '中国科学院计算技术研究所' : 'Institute of Computing Technology, Chinese Academy of Sciences'} loading="lazy" />
+        </a>
+      </div>
     </div>
     <a href="#top">{zh ? '返回顶部' : 'Back to top'} <span aria-hidden="true">↑</span></a>
   </div>

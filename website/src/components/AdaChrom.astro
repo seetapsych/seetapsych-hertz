@@ -1,0 +1,47 @@
+---
+import { site } from '../data/site';
+
+interface Props { lang?: 'en' | 'zh'; }
+const { lang = 'en' } = Astro.props;
+const zh = lang === 'zh';
+const stages = zh
+  ? [
+      { label: '预处理', title: '自适应皮肤 ROI', copy: '人脸对齐后，算法将几何人脸区域与 YCrCb 肤色约束相交。AdaChrom-v4 进一步保留与面部区域一致的较大连通分量，减少孤立误检。' },
+      { label: 'BVP 提取', title: '时序色度轨迹', copy: '在滑动窗口内汇聚有效 ROI 的平均 BGR 颜色信号，再依据时间戳重采样、平滑并按通道时序均值归一化。' },
+      { label: '心率估计', title: 'CHROM 与 FFT', copy: 'CHROM 色度投影恢复血容量脉搏信号；加窗 FFT 在约 50–120 BPM 频带内选择主频，并换算为心率。' },
+    ]
+  : [
+      { label: 'PRE-PROCESSING', title: 'Adaptive skin ROI', copy: 'After face alignment, geometric facial regions are intersected with YCrCb skin constraints. AdaChrom-v4 further retains larger connected components consistent with the face region to reduce isolated false positives.' },
+      { label: 'BVP EXTRACTION', title: 'Temporal chrominance traces', copy: 'Mean BGR signals from valid ROIs are aggregated in a sliding window, then resampled from timestamps, smoothed, and normalized by each channel’s temporal mean.' },
+      { label: 'HEART-RATE ESTIMATION', title: 'CHROM and FFT', copy: 'CHROM chrominance projection recovers the blood-volume-pulse signal. A windowed FFT selects the dominant frequency within an approximately 50–120 BPM band and converts it to heart rate.' },
+    ];
+---
+
+<article class="algorithm-card algorithm-card--adachrom" id="adachrom" aria-labelledby="adachrom-title">
+  <header class="algorithm-card-header">
+    <div class="algorithm-index" aria-hidden="true">02</div>
+    <div>
+      <p class="algorithm-kicker">{zh ? '无监督 · 信号处理' : 'UNSUPERVISED · SIGNAL PROCESSING'}</p>
+      <h3 id="adachrom-title">AdaChrom</h3>
+      <p>{zh
+        ? 'AdaChrom 是一种无需标注训练数据的无监督 rPPG 心率估计方法。它从人脸 RGB 视频中定位可靠的皮肤区域，提取随脉搏变化的细微颜色信号，通过 CHROM 色度投影恢复血容量脉搏波形，最后利用 FFT 主频分析输出心率，为 TinyHR 之外提供一条轻量、可解释的开源方案。'
+        : 'AdaChrom is an unsupervised rPPG heart-rate estimator that requires no labeled training data. It locates reliable skin regions in facial RGB video, extracts subtle pulse-related color changes, recovers a blood-volume-pulse waveform through CHROM chrominance projection, and estimates heart rate from the dominant FFT frequency, providing a lightweight and interpretable open-source alternative to TinyHR.'}</p>
+    </div>
+  </header>
+
+  <figure class="adachrom-pipeline">
+    <div class="adachrom-pipeline-frame">
+      <img src={site.adachromPipelineUrl} alt={zh ? 'AdaChrom 预处理、BVP 提取和心率后处理流程' : 'AdaChrom preprocessing, BVP extraction, and heart-rate post-processing pipeline'} loading="lazy" width="1170" height="396" />
+    </div>
+  </figure>
+
+  <div class="adachrom-stage-grid" aria-label={zh ? 'AdaChrom 处理流程' : 'AdaChrom processing stages'}>
+    {stages.map((stage) => (
+      <section class="adachrom-stage">
+        <p>{stage.label}</p>
+        <h4>{stage.title}</h4>
+        <span>{stage.copy}</span>
+      </section>
+    ))}
+  </div>
+</article>

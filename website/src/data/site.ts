@@ -1,8 +1,7 @@
 import { withBase } from '../utils/path';
 
 export const site = {
-  brand: 'SeetaPsych Hertz',
-  model: 'TinyHR',
+  brand: 'HERTZ',
   repoUrl: 'https://github.com/seetapsych/seetapsych-hertz',
   maeBpm: '3.88',
   dataset: 'VIPL-HR V1',
@@ -17,4 +16,7 @@ export const site = {
   heroPreviewUrl: withBase('/media/hero-preview.mp4'),
   demoUrl: withBase('/media/demo-full.mp4'),
   posterUrl: withBase('/media/demo-poster.jpg'),
+  adachromPipelineUrl: withBase('/media/adachrom-pipeline.png'),
+  southeastUniversityLogoUrl: withBase('/media/affiliations/southeast-university.png'),
+  ictCasLogoUrl: withBase('/media/affiliations/ict-cas.png'),
 } as const;

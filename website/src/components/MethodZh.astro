@@ -1,4 +1,5 @@
 ---
+import AdaChrom from './AdaChrom.astro';
 import { site } from '../data/site';
 
 const modules = [
@@ -11,42 +12,53 @@ const modules = [
 
 <section class="section method-section" id="method" aria-labelledby="method-title">
   <div class="container">
-    <div class="section-heading method-heading">
-      <p class="eyebrow eyebrow-dark">从视频到脉搏</p>
-      <h2 id="method-title">TinyHR 如何工作</h2>
-      <p>远程光电容积描记（rPPG）从人脸皮肤反射光的细微变化中估计脉搏信号。TinyHR 输入 {site.inputFrames} 帧、{site.inputSize} × {site.inputSize} 像素的人脸视频，通过轻量卷积管线强化相邻帧差异、提取紧凑空间特征并进行多尺度时间建模。模型先预测 rPPG 波形，再通过滤波与频谱分析计算心率。</p>
-      <p class="source-note"><a href={`${site.reportUrl}#page=1`} target="_blank" rel="noopener noreferrer">方法说明：TinyHR 技术报告第 1-6 页。 <span aria-hidden="true">↗</span></a></p>
-    </div>
+    <header class="section-heading method-heading">
+      <p class="eyebrow eyebrow-dark">HERTZ 算法集合</p>
+      <h2 id="method-title">一套工具，多种观测脉搏的路径</h2>
+      <p>HERTZ 将每种心率估计算法作为独立方法模块展示。当前同时提供轻量学习模型与无需训练的可解释管线。</p>
+      <nav class="method-links" aria-label="HERTZ 心率估计方法">
+        <a href="#tinyhr"><span>01</span><strong>TinyHR</strong><small>轻量学习</small></a>
+        <a href="#adachrom"><span>02</span><strong>AdaChrom</strong><small>信号处理</small></a>
+      </nav>
+    </header>
 
-    <figure class="architecture-figure">
-      <a class="architecture-image-link" href={site.flowchartPdfUrl} target="_blank" rel="noopener noreferrer">
-        <img src={site.flowchartImageUrl} width="3200" height="1273" loading="lazy" decoding="async" alt="TinyHR 人脸视频输入、特征提取、波形预测与心率后处理流程图" />
-      </a>
-      <div class="figure-actions">
-        <a class="button button-compact" href={site.flowchartPdfUrl} target="_blank" rel="noopener noreferrer">打开架构 PDF <span aria-hidden="true">↗</span></a>
-        <a class="text-link text-link-dark" href={site.flowchartPdfUrl} download>下载架构图 <span aria-hidden="true">↓</span></a>
-      </div>
-    </figure>
+    <div class="algorithm-stack">
+      <article class="algorithm-card algorithm-card--tinyhr" id="tinyhr" aria-labelledby="tinyhr-title">
+        <header class="algorithm-card-header">
+          <div class="algorithm-index" aria-hidden="true">01</div>
+          <div>
+            <p class="algorithm-kicker">学习型 · 轻量模型</p>
+            <h3 id="tinyhr-title">TinyHR</h3>
+            <p>远程光电容积描记（rPPG）从人脸皮肤反射光的细微变化中估计脉搏信号。TinyHR 输入 {site.inputFrames} 帧、{site.inputSize} × {site.inputSize} 像素的人脸视频，通过轻量卷积管线强化相邻帧差异、提取紧凑空间特征并进行多尺度时间建模。模型先预测 rPPG 波形，再通过滤波与频谱分析计算心率。</p>
+          </div>
+        </header>
 
-    <ol class="module-grid">
-      {modules.map(([number, title, copy]) => (
-        <li>
-          <p class="module-number">{number}</p>
-          <h3>{title}</h3>
-          <p>{copy}</p>
-        </li>
-      ))}
-    </ol>
+        <figure class="architecture-figure">
+          <a class="architecture-image-link" href={site.flowchartPdfUrl} target="_blank" rel="noopener noreferrer">
+            <img src={site.flowchartImageUrl} width="3200" height="1273" loading="lazy" decoding="async" alt="TinyHR 人脸视频输入、特征提取、波形预测与心率后处理流程图" />
+          </a>
+          <div class="figure-actions">
+            <a class="button button-compact" href={site.flowchartPdfUrl} target="_blank" rel="noopener noreferrer">打开架构 PDF <span aria-hidden="true">↗</span></a>
+            <a class="text-link text-link-dark" href={site.flowchartPdfUrl} download>下载架构图 <span aria-hidden="true">↓</span></a>
+          </div>
+        </figure>
 
-    <div class="inference-panel">
-      <div>
-        <p class="eyebrow">推理</p>
-        <h3>从波形到心率</h3>
-      </div>
-      <div>
-        <p>推理时使用带通滤波保留 0.75-2.5 Hz 的生理频带，再通过 Welch 方法估计功率谱密度，将主频转换为每分钟心跳次数。</p>
-        <p class="formula"><code>心率（BPM）= 60 × 主频（Hz）</code></p>
-      </div>
+        <ol class="module-grid">
+          {modules.map(([number, title, copy]) => (
+            <li><p class="module-number">{number}</p><h4>{title}</h4><p>{copy}</p></li>
+          ))}
+        </ol>
+
+        <div class="inference-panel">
+          <div><p class="eyebrow">推理</p><h4>从波形到心率</h4></div>
+          <div>
+            <p>推理时使用带通滤波保留 0.75-2.5 Hz 的生理频带，再通过 Welch 方法估计功率谱密度，将主频转换为每分钟心跳次数。</p>
+            <p class="formula"><code>心率（BPM）= 60 × 主频（Hz）</code></p>
+          </div>
+        </div>
+      </article>
+
+      <AdaChrom lang="zh" />
     </div>
   </div>
 </section>

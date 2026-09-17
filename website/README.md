@@ -1,8 +1,20 @@
-# SeetaPsych Hertz — Research Project Page
+# HERTZ — Research Project Page
 
-A static research showcase for TinyHR: facial video, remote photoplethysmography (rPPG), and heart-rate estimation.
+A static research showcase for an extensible collection of open-source heart-rate estimators using facial video and remote photoplethysmography (rPPG).
+
+## HERTZ collection layout
+
+The public interface uses **HERTZ** as the shared product name. TinyHR and AdaChrom appear as independent method cards with distinct light tints, numbered navigation, and a reserved extension card for future estimators. Public assets are resolved through `withBase()` so local development, repository subpath deployment, and GitHub Pages use the same component code.
+
+This section and the current source code supersede the initial TinyHR-only blueprint retained below for design provenance. The maintained interface is bilingual, uses HERTZ as the collection identity, and treats each estimator as an independent expandable module.
 
 **Revision: 2026-09-09 · English template redesign implemented locally.** The current site is the English Astro adaptation: it uses the selected template's research-page composition, real recorded video, report-backed method text, and the supplied architecture diagram. Current build and browser evidence is recorded in [docs/VERIFICATION.md](docs/VERIFICATION.md).
+
+## AdaChrom method addition
+
+The method section presents TinyHR and AdaChrom as two open-source approaches under one heading, with direct anchors to each algorithm. `src/components/AdaChrom.astro` supplies one concise paragraph in English and Chinese, followed by the AdaChrom pipeline figure extracted from page 10 of the SeetaPsych v1.0 technical report. The source PDF is used as a content reference and is not distributed with the website.
+
+TinyHR performance copy uses the team-provided 100-run mean inference times: 80 ms on an Intel Core i9-13900KF CPU at 3.00 GHz and 6 ms on an NVIDIA H20 GPU in a server environment. Runtime configuration was not recorded. The website labels these as model-inference measurements and excludes capture, face detection, input-window collection, and update scheduling.
 
 ## 1. Fixed scope
 

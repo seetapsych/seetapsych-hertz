@@ -67,6 +67,14 @@
       "derivedFrom": "public/downloads/tinyhr-flowchart.pdf",
       "width": 3200,
       "height": 1273
+    },
+    {
+      "path": "public/media/adachrom-pipeline.png",
+      "bytes": 147874,
+      "sha256": "abc07df485997a9800ecddea1d7218a93bb7574e9e486be25832f7d9bb0f6575",
+      "derivedFrom": "SeetaPsych v1.0 technical report, page 10, Figure 3",
+      "width": 1170,
+      "height": 460
     }
   ]
 }
