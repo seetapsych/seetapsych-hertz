@@ -2,7 +2,7 @@
 
 # HERTZ
 
-<img src="https://raw.githubusercontent.com/seetapsych/seetapsych-hertz/main/website/public/media/tinyhr-logo.png" width="460" alt="HERTZ 标志">
+<img src="website/public/media/tinyhr-logo.png" width="460" alt="HERTZ 标志">
 
 ### 面向人脸视频的开源心率估计算法集合
 
@@ -14,8 +14,8 @@ HERTZ 将多种互补的心率估计方法组织为可扩展的开源算法集�
 
 [项目简介](#项目简介) · [算法集合](#hertz-心率估计算法集合) · [安装](#安装) · [模块库](#模块库) · [资源](#项目资源)
 
-[![Python](https://img.shields.io/badge/Python-3.10%2B-2563D8?logo=python&logoColor=white)](https://github.com/seetapsych/seetapsych-hertz/blob/main/pyproject.toml)
-[![License](https://img.shields.io/badge/License-BSD--3--Clause-75E5C9)](https://github.com/seetapsych/seetapsych-hertz/blob/main/LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-2563D8?logo=python&logoColor=white)](pyproject.toml)
+[![License](https://img.shields.io/badge/License-BSD--3--Clause-75E5C9)](LICENSE)
 
 </div>
 
@@ -35,7 +35,7 @@ TinyHR 是从人脸视频预测 rPPG 波形、再通过频谱后处理估计心�
 
 #### 演示
 
-[![TinyHR 演示：人脸视频、预测脉搏波形和心率估计](https://raw.githubusercontent.com/seetapsych/seetapsych-hertz/main/website/public/media/tinyhr-demo.gif)](https://raw.githubusercontent.com/seetapsych/seetapsych-hertz/main/website/public/media/demo-full.mp4)
+[![TinyHR 演示：人脸视频、预测脉搏波形和心率估计](website/public/media/tinyhr-demo.gif)](website/public/media/demo-full.mp4)
 
 演示画面同时呈现检测到的人脸、预测的 rPPG 波形和心率估计。
 
@@ -58,7 +58,7 @@ TinyHR 使用四个 rPPG 数据集的子集训练。下表依据技术报告列�
 | 学习率调度器 | OneCycleLR |
 | 输入视频片段 | 160 帧 RGB 人脸裁剪图像，每帧缩放至 128 × 128 像素 |
 
-来源：[TinyHR 技术报告](https://raw.githubusercontent.com/seetapsych/seetapsych-hertz/main/website/public/downloads/tinyhr-technical-report.pdf)，第 1 页（模型输入）与第 6–7 页（训练数据和配置）。
+来源：[TinyHR 技术报告](website/public/downloads/tinyhr-technical-report.pdf)，第 1 页（模型输入）与第 6–7 页（训练数据和配置）。
 
 #### 模型规模与参考推理时间
 
@@ -75,7 +75,7 @@ TinyHR 使用四个 rPPG 数据集的子集训练。下表依据技术报告列�
 
 #### 模型架构与推理
 
-[![TinyHR 架构和推理流程](https://raw.githubusercontent.com/seetapsych/seetapsych-hertz/main/website/public/media/tinyhr-flowchart.png)](https://raw.githubusercontent.com/seetapsych/seetapsych-hertz/main/website/public/downloads/tinyhr-flowchart.pdf)
+[![TinyHR 架构和推理流程](website/public/media/tinyhr-flowchart.png)](website/public/downloads/tinyhr-flowchart.pdf)
 
 | 阶段 | 模块 | 功能 |
 |---:|---|---|
@@ -131,13 +131,13 @@ pipeline = Pipeline(factory, ...)
 pipeline.add_attributes("face/heart_rate")
 ~~~
 
-完整的端到端可视化示例请参见 [examples/camera_heart_rate.py](https://github.com/seetapsych/seetapsych-hertz/blob/main/examples/camera_heart_rate.py)。
+完整的端到端可视化示例请参见 [examples/camera_heart_rate.py](examples/camera_heart_rate.py)。
 
 #### TinyHR 资源
 
-- [完整演示视频](https://raw.githubusercontent.com/seetapsych/seetapsych-hertz/main/website/public/media/demo-full.mp4)
-- [TinyHR 技术报告](https://raw.githubusercontent.com/seetapsych/seetapsych-hertz/main/website/public/downloads/tinyhr-technical-report.pdf)
-- [模型架构图](https://raw.githubusercontent.com/seetapsych/seetapsych-hertz/main/website/public/downloads/tinyhr-flowchart.pdf)
+- [完整演示视频](website/public/media/demo-full.mp4)
+- [TinyHR 技术报告](website/public/downloads/tinyhr-technical-report.pdf)
+- [模型架构图](website/public/downloads/tinyhr-flowchart.pdf)
 
 ### AdaChrom：无监督色度 rPPG
 
@@ -242,14 +242,14 @@ seetapsych-manager download
 
 | 模块 | 说明 | 输入方式 |
 |---|---|---|
-| [AdaChrom](https://github.com/seetapsych/seetapsych-hertz/blob/main/seetapsych_hertz/modules/ada-chrom.yml) | 基于自适应皮肤 ROI 的色度 rPPG 方法，脉搏估计不依赖学习模型 | 视频流 · 视频文件 |
-| [TinyHR](https://github.com/seetapsych/seetapsych-hertz/blob/main/seetapsych_hertz/modules/tiny-hr.yml) | 卷积式 rPPG 波形估计，结合基于 Welch PSD 的心率后处理 | 视频流 · 视频文件 |
+| [AdaChrom](seetapsych_hertz/modules/ada-chrom.yml) | 基于自适应皮肤 ROI 的色度 rPPG 方法，脉搏估计不依赖学习模型 | 视频流 · 视频文件 |
+| [TinyHR](seetapsych_hertz/modules/tiny-hr.yml) | 卷积式 rPPG 波形估计，结合基于 Welch PSD 的心率后处理 | 视频流 · 视频文件 |
 
 ### AdaChrom
 
 > 基于自适应皮肤 ROI 的色度分析实现无模型 rPPG 心率估计。
 
-模块配置：[ada-chrom.yml](https://github.com/seetapsych/seetapsych-hertz/blob/main/seetapsych_hertz/modules/ada-chrom.yml)
+模块配置：[ada-chrom.yml](seetapsych_hertz/modules/ada-chrom.yml)
 
 | 包 | 提供 | 依赖 |
 |---|---|---|
@@ -284,20 +284,20 @@ seetapsych-manager download
 
 ## 项目资源
 
-- [TinyHR 技术报告](https://raw.githubusercontent.com/seetapsych/seetapsych-hertz/main/website/public/downloads/tinyhr-technical-report.pdf)
-- [TinyHR 模型架构图](https://raw.githubusercontent.com/seetapsych/seetapsych-hertz/main/website/public/downloads/tinyhr-flowchart.pdf)
+- [TinyHR 技术报告](website/public/downloads/tinyhr-technical-report.pdf)
+- [TinyHR 模型架构图](website/public/downloads/tinyhr-flowchart.pdf)
 - [HERTZ 项目主页](https://seetapsych.github.io/seetapsych-hertz/zh/)
-- [交互式项目主页源码](https://github.com/seetapsych/seetapsych-hertz/tree/main/website)
+- [交互式项目主页源码](website/)
 - Hugging Face 模型发布与交互式演示正在规划中。
 
 ## 开源许可
 
-本项目使用 [BSD 3-Clause License](https://github.com/seetapsych/seetapsych-hertz/blob/main/LICENSE) 发布。
+本项目使用 [BSD 3-Clause License](LICENSE) 发布。
 
 ## 项目机构
 
 <p align="center">
-  <a href="https://mysee1989.github.io/" title="东南大学"><img src="https://raw.githubusercontent.com/seetapsych/seetapsych-hertz/main/website/public/media/affiliations/southeast-university.png" alt="东南大学" height="104" /></a>
+  <a href="https://mysee1989.github.io/" title="东南大学"><img src="website/public/media/affiliations/southeast-university.png" alt="东南大学" height="104" /></a>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="https://vipl.ict.ac.cn/" title="中国科学院计算技术研究院"><img src="https://raw.githubusercontent.com/seetapsych/seetapsych-hertz/main/website/public/media/affiliations/ict-cas.png" alt="中国科学院计算技术研究院" height="72" /></a>
+  <a href="https://vipl.ict.ac.cn/" title="中国科学院计算技术研究院"><img src="website/public/media/affiliations/ict-cas.png" alt="中国科学院计算技术研究院" height="72" /></a>
 </p>
